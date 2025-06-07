@@ -14,13 +14,20 @@ body {
 @media (max-width: 600px) {
     body {
         padding: 0;
+        background-color: #9cd4a0;
     }
     .game-container {
-        margin-top: 8vw;
-        min-height: 48vh;
+        margin-top: 4vw;
+        min-height: 0;
         max-width: 100vw;
+        width: 100vw;
+        height: 100vw;
         border-radius: 0 0 16px 16px;
         box-shadow: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
     }
 }
 .game-container {
@@ -38,6 +45,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     min-height: 55vh;
+    /* 桌面端为长方形，移动端正方形由媒体查询控制 */
 }
 .message {
     margin-bottom: 20px;
@@ -155,19 +163,31 @@ button:active, .half-btn:active, .start-btn:active {
     font-weight: normal;
 }
 .copyright {
-    margin-top: 32px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 10px;
     text-align: center;
     color: #888;
-    font-size: 13px;
+    font-size: 11px;
     letter-spacing: 0.5px;
     user-select: none;
     opacity: 0.85;
-    padding-bottom: 6px;
+    z-index: 100;
+    background: transparent;
+    pointer-events: none;
+    line-height: 1.5;
+}
+.copyright a {
+    color: #71B988;
+    text-decoration: underline;
+    font-size: 11px;
+    pointer-events: auto;
 }
 @media (max-width: 600px) {
     .copyright {
-        font-size: 12px;
-        margin-top: 18px;
-        padding-bottom: 10px;
+        font-size: 10px;
+        padding-bottom: 6px;
+        bottom: 4px;
     }
 }
