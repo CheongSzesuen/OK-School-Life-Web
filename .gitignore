@@ -1,0 +1,13 @@
+build/
+dist/
+.venv/
+.ok_school_life.spec
+.DS_Store
+Thumbs.db
+*.log
+*.pyc
+__pycache__/
+.idea/
+.vscode/
+venv/
+ok_school_life.spec
