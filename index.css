@@ -51,7 +51,6 @@ body {
     align-items: center;
     justify-content: flex-start;
     padding: 18px 12px;
-    /* 关键：自适应比例，最大宽高限制 */
     aspect-ratio: 1/1;
     width: 90vw;
     max-width: 480px;
@@ -60,6 +59,8 @@ body {
     min-height: 260px;
     margin: 0 auto;
     overflow: hidden;
+    /* 新增：让内容和版权分布上下两端 */
+    justify-content: space-between;
 }
 
 @media (min-width: 700px) {
@@ -204,21 +205,19 @@ button:active, .half-btn:active, .start-btn:active {
 }
 
 .copyright {
-    width: 100vw;
+    width: 100%;
     text-align: center;
     color: #888;
     font-size: 12px;
     letter-spacing: 0.5px;
     user-select: none;
     opacity: 0.85;
-    position: fixed;
-    left: 0;
-    bottom: 0;
     background: transparent;
-    z-index: 10;
-    padding-bottom: 8px;
+    z-index: 1;
+    padding-bottom: 4px;
     pointer-events: none;
     line-height: 1.5;
+    margin-top: 8px;
 }
 
 .copyright a {
@@ -238,7 +237,7 @@ button:active, .half-btn:active, .start-btn:active {
     }
     .copyright {
         font-size: 10px;
-        padding-bottom: 4px;
+        padding-bottom: 2px;
     }
 }
 
