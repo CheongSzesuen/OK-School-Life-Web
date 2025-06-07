@@ -576,25 +576,47 @@ function hideAbout() {
     document.getElementById('bottom-options').style.display = '';
 }
 
+function hideLoadingScreen() {
+    const loading = document.getElementById('loading-screen');
+    if (loading) {
+        loading.style.opacity = '0';
+        setTimeout(() => loading.style.display = 'none', 400);
+    }
+    document.querySelector('.game-container').style.display = '';
+}
+
+// 加载图片并返回Promise
+function preloadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new window.Image();
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = src;
+    });
+}
+
 // 加载JSON数据并初始化游戏
 function loadGameData() {
-    fetch('data/events.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            gameState.eventData = data;
-            gameState.version = data.metadata.version || "v0.4.0";
-            const initData = apiStartGame();
-            updateUI(initData);
-        })
-        .catch(error => {
-            console.error('Error loading game data:', error);
-            alert('加载游戏数据失败，请刷新页面重试。');
-        });
+    Promise.all([
+        fetch('data/events.json')
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            }),
+        preloadImage('images/icons/icon-v4.png'),
+        preloadImage('https://github.com/CheongSzesuen/OK-School-Life-Web/blob/main/images/welcome/mini/welcome-v4.png?raw=true')
+    ])
+    .then(([data]) => {
+        gameState.eventData = data;
+        gameState.version = data.metadata.version || "v0.4.0";
+        const initData = apiStartGame();
+        updateUI(initData);
+        hideLoadingScreen();
+    })
+    .catch(error => {
+        console.error('Error loading game data:', error);
+        alert('加载游戏数据失败，请刷新页面重试。');
+    });
 }
 
 // 初始化游戏

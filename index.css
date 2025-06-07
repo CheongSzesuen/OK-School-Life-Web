@@ -227,6 +227,55 @@ button:active, .half-btn:active, .start-btn:active {
     pointer-events: auto;
 }
 
+#loading-screen {
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background: #9cd4a0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.4s;
+}
+
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 18px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    animation: loadingSpin 1.2s linear infinite;
+    background: #fff;
+    object-fit: cover;
+}
+@keyframes loadingSpin {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+.loading-title {
+    font-size: 2rem;
+    color: #388e3c;
+    font-weight: bold;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.loading-sub {
+    font-size: 1rem;
+    color: #666;
+    opacity: 0.8;
+    margin-top: 4px;
+    letter-spacing: 1px;
+}
+
 @media (max-width: 600px) {
     .game-container {
         width: 98vw;
