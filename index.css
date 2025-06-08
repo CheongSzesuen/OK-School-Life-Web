@@ -37,7 +37,28 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+<<<<<<< HEAD
     min-height: 65vh;
+=======
+    padding: 18px 12px;
+    /* 关键：自适应比例，最大宽高限制 */
+    aspect-ratio: 1/1;
+    width: 90vw;
+    max-width: 480px;
+    max-height: 80vh;
+    min-width: 260px;
+    min-height: 260px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+@media (min-width: 700px) {
+    .game-container {
+        aspect-ratio: 4/3;
+        max-width: 600px;
+        max-height: 80vh;
+    }
+>>>>>>> parent of 692e250 (优化移动端样式，调整版权信息布局，增强内容分布)
 }
 
 .message {
@@ -182,14 +203,29 @@ button:active, .half-btn:active, .start-btn:active {
 }
 
 .copyright {
+<<<<<<< HEAD
     margin-top: 32px;
+=======
+    width: 100vw;
+>>>>>>> parent of 692e250 (优化移动端样式，调整版权信息布局，增强内容分布)
     text-align: center;
     color: #888;
     font-size: 13px;
     letter-spacing: 0.5px;
     user-select: none;
     opacity: 0.85;
+<<<<<<< HEAD
     padding-bottom: 6px;
+=======
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background: transparent;
+    z-index: 10;
+    padding-bottom: 8px;
+    pointer-events: none;
+    line-height: 1.5;
+>>>>>>> parent of 692e250 (优化移动端样式，调整版权信息布局，增强内容分布)
 }
 
 #cover-img {
@@ -217,6 +253,7 @@ button:active, .half-btn:active, .start-btn:active {
     }
     
     .copyright {
+<<<<<<< HEAD
         font-size: 12px;
         margin-top: 18px;
         padding-bottom: 10px;
@@ -261,6 +298,10 @@ button:active, .half-btn:active, .start-btn:active {
     
     .loading-bar {
         width: 250px;
+=======
+        font-size: 10px;
+        padding-bottom: 4px;
+>>>>>>> parent of 692e250 (优化移动端样式，调整版权信息布局，增强内容分布)
     }
 }
 
