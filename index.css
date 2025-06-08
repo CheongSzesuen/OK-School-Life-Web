@@ -1,10 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+=======
+>>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
 =======
 >>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
 body {
@@ -19,6 +22,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
 <<<<<<< HEAD
+<<<<<<< HEAD
     animation: fadeInBody 1.2s ease;
 }
 
@@ -27,6 +31,9 @@ body {
     to { opacity: 1; }
 =======
 }
+=======
+}
+>>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
 @media (max-width: 600px) {
     body {
         padding: 0;
@@ -50,8 +57,13 @@ body {
 .game-container {
     background-color: white;
 <<<<<<< HEAD
+<<<<<<< HEAD
     padding: 25px;
     border-radius: 12px;
+=======
+    padding: 20px;
+    border-radius: 10px;
+>>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
 =======
     padding: 20px;
     border-radius: 10px;
@@ -62,7 +74,11 @@ body {
     max-width: 600px;
     min-width: 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
     width: 90%;
+=======
+    width: 100%;
+>>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
 =======
     width: 100%;
 >>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
@@ -70,6 +86,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     min-height: 65vh;
@@ -95,6 +112,11 @@ body {
 >>>>>>> parent of 692e250 (优化移动端样式，调整版权信息布局，增强内容分布)
 }
 
+=======
+    min-height: 55vh;
+    /* 桌面端为长方形，移动端正方形由媒体查询控制 */
+}
+>>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
 =======
     min-height: 55vh;
     /* 桌面端为长方形，移动端正方形由媒体查询控制 */
@@ -200,12 +222,15 @@ button:active, .half-btn:active, .start-btn:active {
     white-space: nowrap;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 .title-section {
     text-align: center;
     margin-bottom: 16px;
 }
 
+=======
+>>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
 =======
 >>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
 .main-title {
@@ -228,6 +253,7 @@ button:active, .half-btn:active, .start-btn:active {
     font-weight: normal;
 }
 .copyright {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     margin-top: 32px;
@@ -259,6 +285,19 @@ button:active, .half-btn:active, .start-btn:active {
     opacity: 0.85;
     z-index: 100;
 >>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
+=======
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    text-align: center;
+    color: #888;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    user-select: none;
+    opacity: 0.85;
+    z-index: 100;
+>>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
     background: transparent;
     pointer-events: none;
     line-height: 1.5;
@@ -274,6 +313,7 @@ button:active, .half-btn:active, .start-btn:active {
     border-radius: 12px;
     border: 1px solid #f0f0f0;
 }
+<<<<<<< HEAD
 
 /* 响应式设计 */
 @media (max-width: 600px) {
@@ -291,6 +331,8 @@ button:active, .half-btn:active, .start-btn:active {
     }
     
 =======
+=======
+>>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
 .copyright a {
     color: #71B988;
     text-decoration: underline;
@@ -298,6 +340,9 @@ button:active, .half-btn:active, .start-btn:active {
     pointer-events: auto;
 }
 @media (max-width: 600px) {
+<<<<<<< HEAD
+>>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
+=======
 >>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
     .copyright {
 <<<<<<< HEAD
@@ -348,6 +393,7 @@ button:active, .half-btn:active, .start-btn:active {
 =======
         font-size: 10px;
 <<<<<<< HEAD
+<<<<<<< HEAD
         padding-bottom: 4px;
 >>>>>>> parent of 692e250 (优化移动端样式，调整版权信息布局，增强内容分布)
     }
@@ -373,6 +419,11 @@ button:active, .half-btn:active, .start-btn:active {
     .loading-bar {
         width: 220px;
     }
+=======
+        padding-bottom: 6px;
+        bottom: 4px;
+    }
+>>>>>>> parent of 2cff7a0 (优化移动端样式，调整游戏容器和版权信息布局)
 =======
         padding-bottom: 6px;
         bottom: 4px;
