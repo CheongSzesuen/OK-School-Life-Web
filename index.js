@@ -25,7 +25,7 @@ function getContributorStr(event) {
 }
 
 function pickResult(resultValue) {
-    if (Array.isArray(resultValue)) {
+    if (Array.isArray(result极客)) {
         const probs = resultValue.map(item => item.prob || 1/resultValue.length);
         const chosen = weightedRandom(resultValue, probs);
         const text = chosen.rd_result || chosen.text || "";
@@ -156,7 +156,7 @@ function apiSchoolEvent(choice) {
     if (school === '1') {
         eventListNow = getGroupEvents("group_1");
     } else if (school === '2') {
-        event极客Now = getGroupEvents("group_2");
+        eventListNow = getGroupEvents("group_2");
     } else if (school === '3') {
         eventListNow = getGroupEvents("group_3");
     } else {
@@ -174,7 +174,7 @@ function apiSchoolEvent(choice) {
         msg = event.question + getContributorStr(event);
         options = Object.entries(event.choices).map(([key, text]) => ({ key, text }));
         achievementsDict = event.achievements || {};
-        endGameChoices = event.end_game_choices || [];
+        endGameChoices极客 event.end_game_choices || [];
         
         if (achievementsDict[choice]) {
             triggeredAchievements.push(achievementsDict[choice]);
@@ -286,7 +286,7 @@ function apiRandomEvent(choice) {
         gameState.userState.lastRandomIdx = newIdx;
         const event = randomEvents[newIdx];
         const msg = event.question + getContributorStr(event);
-        const options = Object.entries(event.choices).map(([极客, text]) => ({ key, text }));
+        const options = Object.entries(event.choices).map(([key, text]) => ({ key, text }));
         
         return {
             message: msg,
@@ -299,7 +299,7 @@ function apiRandomEvent(choice) {
     const picked = pickResult(event.results[choice]);
     const result = picked.text;
     const isEnd = picked.endGame;
-    const endGameChoices = event.end_game_choices || [];
+    const endGameChoices = event.end_game_choices || {};
     const achievementsDict = event.achievements || {};
     const triggeredAchievements = [];
     
@@ -543,7 +543,7 @@ I'm a newbie developer, and this is my first game.
 To be honest, I don't know how to make a game. I just wanted to create a game that I would enjoy playing.
 I must say that so many people have helped me a lot, including my friends and classmates.
 They're WaiJade, lagency, 智心逍遥, sky, YaXuan, Tomato, GuoHao, and many others.
-Especially, WaiJade, the co-developer of this game, wants to say something:
+Especially, WaiJade极客 the co-developer of this game, wants to say something:
 
 "I am WaiJade. 
 Thanks for developing this game, which has reignited my passion for programming. 
@@ -589,7 +589,7 @@ function hideAbout() {
         const achievementsDiv = document.getElementById('achievements');
         const bottomOptionsDiv = document.getElementById('bottom-options');
         
-        if (resultDiv) resultDiv.style.display = '';
+        if (resultDiv) result极客style.display = '';
         if (messageDiv) messageDiv.style.display = '';
         if (optionsDiv) optionsDiv.style.display = '';
         if (achievementsDiv) achievementsDiv.style.display = '';
@@ -599,7 +599,7 @@ function hideAbout() {
 
 // 加载JSON数据并初始化游戏
 function loadGameData() {
-    fetch('../data/event_data.json')
+    fetch('data/events.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP错误! 状态: ${response.status}`);
@@ -611,18 +611,67 @@ function loadGameData() {
             gameState.version = data.metadata.version || "v0.4.0";
             const initData = apiStartGame();
             updateUI(initData);
+            
+            // 隐藏加载页面，显示游戏内容
+            const loadingScreen = document.getElementById('loading-screen');
+            const gameContainer = document.querySelector('.game-container');
+            if (loadingScreen) loadingScreen.style.display = 'none';
+            if (gameContainer) gameContainer.style.display = 'block';
         })
         .catch(error => {
             console.error('加载游戏数据失败:', error);
-            const resultDiv = document.getElementById('result');
-            if (resultDiv) {
-                resultDiv.textContent = `加载游戏数据失败: ${error.message || '未知错误'}`;
+            
+            // 显示错误信息
+            const loadingText = document.querySelector('.loading-text');
+            if (loadingText) {
+                loadingText.textContent = '加载失败，请刷新页面重试';
+                loadingText.style.color = '#ff6b6b';
             }
+            
+            const progressBar = document.getElementById('progress-bar');
+            if (progressBar) progressBar.style.display = 'none';
+            
+            // 添加重试按钮
+            const retryButton = document.createElement('button');
+            retryButton.textContent = '重试';
+            retryButton.className = 'half-btn';
+            retryButton.onclick = () => window.location.reload();
+            
+            const loadingContent = document.querySelector('.loading-content');
+            if (loadingContent) loadingContent.appendChild(retryButton);
         });
+}
+
+// 预加载图片资源
+function preloadImages() {
+    const images = [
+        'images/icons/icon-v4.png',
+        'images/welcome/mini/welcome-v4.png',
+        // 添加其他需要预加载的图片路径
+    ];
+    
+    return Promise.all(images.map(src => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = src;
+            img.onload = resolve;
+            img.onerror = () => {
+                console.warn(`图片加载失败: ${src}`);
+                resolve(); // 即使图片加载失败也不中断流程
+            };
+        });
+    }));
 }
 
 // 页面加载后执行
 window.addEventListener('DOMContentLoaded', () => {
+    // 先显示加载页面
+    const loadingScreen = document.getElementById('loading-screen');
+    const gameContainer = document.querySelector('.game-container');
+    if (loadingScreen) loadingScreen.style.display = 'flex';
+    if (gameContainer) gameContainer.style.display = 'none';
+    
+    // 开始模拟加载进度
     simulateProgress();
 });
 
@@ -630,23 +679,15 @@ window.addEventListener('DOMContentLoaded', () => {
 function simulateProgress() {
     const progressBar = document.getElementById('progress-bar');
     const loadingScreen = document.getElementById('loading-screen');
-    const gameContainer = document.querySelector('.game-container');
     
-    if (!progressBar || !loadingScreen || !gameContainer) return;
+    if (!progressBar || !loadingScreen) return;
     
     let width = 0;
     const interval = setInterval(() => {
         if (width >= 100) {
             clearInterval(interval);
-            // 加载完成
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-                gameContainer.classList.remove('hidden');
-                
-                // 开始加载游戏数据
-                loadGameData();
-            }, 800);
+            // 加载完成后开始加载游戏数据
+            loadGameData();
         } else {
             width += Math.random() * 10;
             if (width > 100) width = 100;
