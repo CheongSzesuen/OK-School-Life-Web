@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>OK School Life</title>
-    <!-- 图标与PWA相关meta，路径已修正 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="57x57" href="images/icons/standard/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="images/icons/standard/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="images/icons/standard/apple-icon-72x72.png">
@@ -20,32 +21,702 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="images/icons/standard/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet" href="index.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .game-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-radius: 5px;
+            white-space: pre-line;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .options-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: space-between;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        button, .half-btn, .start-btn {
+            padding: 10px 24px;
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+            outline: none;
+            white-space: nowrap;
+        }
+
+        button:hover, .half-btn:hover, .start-btn:hover {
+            background: #1565c0;
+        }
+
+        button:active, .half-btn:active, .start-btn:active {
+            background: #0d47a1;
+        }
+
+        .achievements {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fffacd;
+            border-radius: 5px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        #achievements-list p {
+            margin: 0 0 6px 0;
+            font-size: 15px;
+        }
+
+        #about {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .main-btns {
+            width: fit-content;
+            margin: 0 auto;
+            min-width: 320px;
+            max-width: 100%;
+        }
+
+        #options {
+            width: 100%;
+        }
+
+        .start-btn {
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
+            display: block;
+            margin: 20px 0 0 0;
+            box-sizing: border-box;
+            font-size: 15px;
+            padding: 10px 20px;
+            white-space: nowrap;
+        }
+
+        .half-btn {
+            flex: 1 1 0;
+            min-width: 100px;
+            max-width: 220px;
+            padding: 10px 20px;
+            font-size: 15px;
+            box-sizing: border-box;
+            white-space: nowrap;
+        }
+
+        .main-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #71B988;
+            font-weight: normal;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+        }
+
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
     <div class="game-container">
-        <h1 class="main-title"> 
+        <h1 class="main-title">
             OK School Life
             <span class="subtitle">Monet</span>
         </h1>
-        <img id="cover-img" src="https://github.com/CheongSzesuen/OK-School-Life-Web/blob/main/images/welcome/mini/welcome-v4.png?raw=true" alt="主页图片" style="width:100%;max-width:600px;display:block;margin:0 auto 20px auto;border-radius:12px;">
-        <div id="result" class="message" style="background-color:#e6ffe6;"></div>
-        <div id="message" class="message"></div>
+        <div id="loading" class="loading">正在加载游戏数据...</div>
+        <div id="result" class="message" style="background-color:#e6ffe6;display:none;"></div>
+        <div id="message" class="message" style="display:none;"></div>
         <div id="about" class="message" style="display:none; white-space:pre-line;"></div>
         <div class="main-btns">
             <div id="options" class="options"></div>
             <div id="bottom-options" class="options-row"></div>
         </div>
-        <div id="achievements" class="achievements">
+        <div id="achievements" class="achievements" style="display:none;">
             <h3>成就</h3>
             <div id="achievements-list"></div>
         </div>
     </div>
-    <div class="copyright">
-        &copy; 2024 StillAlive &amp; WaiJade<br>
-        网页版模板代码来自 StillAlive，其余由 WaiJade 移植<br>
-        <a href="https://github.com/CheongSzesuen/OK-School-Life-Web" target="_blank">开源仓库</a>
-    </div>
-    <script src="index.js"></script>
-</body>
-</html>
+
+    <script>
+        // 游戏状态
+        const gameState = {
+            school: null,
+            eventIdx: 0,
+            stage: "fixed",
+            randomUsed: new Set(),
+            lastRandomIdx: null,
+            lastResult: "",
+            score: 0,
+            achievements: new Set(),
+            version: "v0.4.0"
+        };
+
+        // 游戏数据
+        let gameData = null;
+
+        // 工具函数
+        function getContributorStr(event) {
+            if (event.contributors && event.contributors.length > 0) {
+                return "（由" + event.contributors.join("、") + "贡献）";
+            }
+            return "";
+        }
+
+        function pickResult(resultValue) {
+            if (Array.isArray(resultValue)) {
+                const probs = resultValue.map(item => item.prob || 1/resultValue.length);
+                const random = Math.random();
+                let cumulative = 0;
+                
+                for (let i = 0; i < resultValue.length; i++) {
+                    cumulative += probs[i];
+                    if (random <= cumulative) {
+                        const chosen = resultValue[i];
+                        return {
+                            text: chosen.rd_result || chosen.text || "",
+                            endGame: chosen.end_game || false
+                        };
+                    }
+                }
+                return { text: resultValue[0].rd_result || resultValue[0].text || "", endGame: false };
+            } else {
+                return { text: resultValue, endGame: false };
+            }
+        }
+
+        function getRandomChoice(arr, weights = null) {
+            if (weights) {
+                const random = Math.random();
+                let cumulative = 0;
+                for (let i = 0; i < weights.length; i++) {
+                    cumulative += weights[i];
+                    if (random <= cumulative) {
+                        return arr[i];
+                    }
+                }
+            }
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        // UI更新函数
+        function updateUI(data) {
+            const resultDiv = document.getElementById('result');
+            const messageDiv = document.getElementById('message');
+            const optionsDiv = document.getElementById('options');
+            const bottomOptionsDiv = document.getElementById('bottom-options');
+            const achievementsDiv = document.getElementById('achievements');
+            const achievementsListDiv = document.getElementById('achievements-list');
+
+            // 隐藏加载提示
+            document.getElementById('loading').style.display = 'none';
+            
+            // 显示消息区域
+            resultDiv.style.display = 'block';
+            messageDiv.style.display = 'block';
+
+            // 处理消息文本
+            if (data.message) {
+                const lines = data.message.split('\n');
+                if (lines.length > 1 && !lines[0].trim().startsWith('>>>')) {
+                    resultDiv.textContent = lines[0].trim();
+                    messageDiv.textContent = lines.slice(1).join('\n').trim();
+                } else {
+                    resultDiv.textContent = '';
+                    messageDiv.textContent = data.message.trim();
+                }
+            }
+
+            // 清空选项
+            optionsDiv.innerHTML = '';
+            bottomOptionsDiv.innerHTML = '';
+
+            // 添加选项按钮
+            if (data.options) {
+                const bottomBtns = [];
+                data.options.forEach(option => {
+                    if (['关于', '退出', '查看成就', '清除数据'].includes(option.text)) {
+                        bottomBtns.push(option);
+                    } else {
+                        const button = document.createElement('button');
+                        button.textContent = option.text;
+                        if (option.text === '开始游戏') {
+                            button.className = 'start-btn';
+                        }
+                        button.onclick = () => makeChoice(option.key, data.start_event);
+                        optionsDiv.appendChild(button);
+                    }
+                });
+
+                // 添加底部按钮
+                bottomBtns.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option.text;
+                    button.className = 'half-btn';
+                    button.onclick = () => handleBottomOption(option.text, option.key, data.start_event);
+                    bottomOptionsDiv.appendChild(button);
+                });
+            }
+
+            // 游戏结束时显示重新开始按钮
+            if (data.game_over) {
+                const button = document.createElement('button');
+                button.textContent = '重新开始';
+                button.onclick = () => restartGame();
+                optionsDiv.appendChild(button);
+            }
+
+            // 处理成就
+            if (data.achievements && data.achievements.length > 0) {
+                data.achievements.forEach(achievement => {
+                    gameState.achievements.add(achievement);
+                });
+            }
+
+            // 更新成就显示
+            if (gameState.achievements.size > 0) {
+                achievementsListDiv.innerHTML = '';
+                Array.from(gameState.achievements).reverse().forEach(achievement => {
+                    const p = document.createElement('p');
+                    p.textContent = achievement;
+                    achievementsListDiv.appendChild(p);
+                });
+                achievementsDiv.style.display = 'block';
+            }
+        }
+
+        // 处理底部选项
+        function handleBottomOption(text, key, startEvent) {
+            switch (text) {
+                case '关于':
+                    showAbout();
+                    break;
+                case '退出':
+                    makeChoice(key, startEvent);
+                    break;
+                case '查看成就':
+                    showAchievements();
+                    break;
+                case '清除数据':
+                    confirmClearData();
+                    break;
+            }
+        }
+
+        // 游戏逻辑函数
+        function startGame() {
+            const startEvent = getRandomChoice(gameData.metadata.start_options, [0.2, 0.5, 0.3]);
+            return {
+                message: `${startEvent}。\n你中考考得很好，现在可以选择学校。`,
+                options: [
+                    {key: '1', text: '羊县中学'},
+                    {key: '2', text: '闪西省汗忠中学'},
+                    {key: '3', text: '汗忠市龙港高级中学'}
+                ],
+                start_event: startEvent,
+                next_event: 'choose_school'
+            };
+        }
+
+        function chooseSchool(school, startEvent) {
+            gameState.school = school;
+            gameState.eventIdx = 0;
+            gameState.stage = "fixed";
+            gameState.randomUsed.clear();
+            gameState.lastRandomIdx = null;
+
+            let eventList;
+            switch (school) {
+                case '1':
+                    eventList = gameData.events.fixed_events.group_1;
+                    break;
+                case '2':
+                    eventList = gameData.events.fixed_events.group_2;
+                    break;
+                case '3':
+                    eventList = gameData.events.fixed_events.group_3;
+                    break;
+                default:
+                    return { message: '未知学校', game_over: true };
+            }
+
+            const event = eventList[0];
+            const msg = event.question + getContributorStr(event);
+            const options = Object.entries(event.choices).map(([k, v]) => ({key: k, text: v}));
+
+            return {
+                message: msg,
+                options: options,
+                next_event: 'school_event'
+            };
+        }
+
+        function processSchoolEvent(choice) {
+            const school = gameState.school;
+            const idx = gameState.eventIdx;
+            
+            let eventList;
+            switch (school) {
+                case '1':
+                    eventList = gameData.events.fixed_events.group_1;
+                    break;
+                case '2':
+                    eventList = gameData.events.fixed_events.group_2;
+                    break;
+                case '3':
+                    eventList = gameData.events.fixed_events.group_3;
+                    break;
+                default:
+                    return { message: '未知学校', game_over: true };
+            }
+
+            const event = eventList[idx];
+            const result = pickResult(event.results[choice]);
+            const achievementsDict = event.achievements || {};
+            const endGameChoices = event.end_game_choices || [];
+
+            const triggeredAchievements = [];
+            if (achievementsDict[choice]) {
+                triggeredAchievements.push(achievementsDict[choice]);
+            }
+
+            // 检查游戏是否结束
+            if (result.endGame || endGameChoices.includes(choice)) {
+                const message = result.text + "\n你失败了，游戏结束！";
+                return {
+                    message: message,
+                    game_over: true,
+                    achievements: triggeredAchievements
+                };
+            }
+
+            gameState.eventIdx++;
+            gameState.score++;
+
+            // 检查是否还有固定事件
+            if (gameState.eventIdx < eventList.length) {
+                const nextEvent = eventList[gameState.eventIdx];
+                const nextMsg = nextEvent.question + getContributorStr(nextEvent);
+                const nextOptions = Object.entries(nextEvent.choices).map(([k, v]) => ({key: k, text: v}));
+                
+                const message = result.text ? result.text + "\n" + nextMsg : nextMsg;
+                return {
+                    message: message,
+                    options: nextOptions,
+                    next_event: 'school_event',
+                    achievements: triggeredAchievements
+                };
+            } else {
+                // 进入随机事件阶段
+                gameState.stage = "random";
+                gameState.lastResult = result.text;
+                
+                const randomEvents = gameData.events.random_events;
+                const unused = [];
+                for (let i = 0; i < randomEvents.length; i++) {
+                    if (!gameState.randomUsed.has(i)) {
+                        unused.push(i);
+                    }
+                }
+
+                if (unused.length === 0) {
+                    const message = result.text + "\n所有事件已完成，游戏结束！";
+                    return {
+                        message: message,
+                        achievements: triggeredAchievements,
+                        game_over: true
+                    };
+                }
+
+                const idx = unused[Math.floor(Math.random() * unused.length)];
+                gameState.randomUsed.add(idx);
+                gameState.lastRandomIdx = idx;
+                
+                const event = randomEvents[idx];
+                const msg = event.question + getContributorStr(event);
+                const options = Object.entries(event.choices).map(([k, v]) => ({key: k, text: v}));
+                
+                const message = result.text ? result.text + "\n" + msg : msg;
+                return {
+                    message: message,
+                    options: options,
+                    next_event: 'random_event',
+                    achievements: triggeredAchievements
+                };
+            }
+        }
+
+        function processRandomEvent(choice) {
+            const randomEvents = gameData.events.random_events;
+            const idx = gameState.lastRandomIdx;
+            
+            if (idx === null) {
+                return { message: '游戏状态错误', game_over: true };
+            }
+
+            const event = randomEvents[idx];
+            const result = pickResult(event.results[choice]);
+            const achievementsDict = event.achievements || {};
+            const endGameChoices = event.end_game_choices || [];
+
+            const triggeredAchievements = [];
+            if (achievementsDict[choice]) {
+                triggeredAchievements.push(achievementsDict[choice]);
+            }
+
+            // 检查游戏是否结束
+            if (result.endGame || endGameChoices.includes(choice)) {
+                const message = result.text + "\n游戏结束！";
+                return {
+                    message: message,
+                    game_over: true,
+                    achievements: triggeredAchievements
+                };
+            }
+
+            gameState.score++;
+            
+            // 寻找下一个随机事件
+            const unused = [];
+            for (let i = 0; i < randomEvents.length; i++) {
+                if (!gameState.randomUsed.has(i)) {
+                    unused.push(i);
+                }
+            }
+
+            if (unused.length === 0) {
+                const message = result.text + "\n所有事件已完成，游戏结束！";
+                return {
+                    message: message,
+                    achievements: triggeredAchievements,
+                    game_over: true
+                };
+            }
+
+            const nextIdx = unused[Math.floor(Math.random() * unused.length)];
+            gameState.randomUsed.add(nextIdx);
+            gameState.lastRandomIdx = nextIdx;
+            
+            const nextEvent = randomEvents[nextIdx];
+            const msg = nextEvent.question + getContributorStr(nextEvent);
+            const options = Object.entries(nextEvent.choices).map(([k, v]) => ({key: k, text: v}));
+            
+            const message = result.text ? result.text + "\n" + msg : msg;
+            return {
+                message: message,
+                options: options,
+                next_event: 'random_event',
+                achievements: triggeredAchievements
+            };
+        }
+
+        // 主要交互函数
+        function makeChoice(choice, startEvent = null) {
+            let data;
+            
+            if (currentState === 'start') {
+                if (choice === '1') {
+                    data = startGame();
+                    currentState = 'choose_school';
+                } else if (choice === '5') {
+                    data = { message: '感谢游玩，期待下次再见！', game_over: true };
+                } else {
+                    return; // 其他选项由底部按钮处理
+                }
+            } else if (currentState === 'choose_school') {
+                data = chooseSchool(choice, startEvent);
+                currentState = 'school_event';
+            } else if (currentState === 'school_event') {
+                data = processSchoolEvent(choice);
+                if (data.next_event === 'random_event') {
+                    currentState = 'random_event';
+                } else if (data.game_over) {
+                    currentState = 'start';
+                }
+            } else if (currentState === 'random_event') {
+                data = processRandomEvent(choice);
+                if (data.game_over) {
+                    currentState = 'start';
+                }
+            }
+
+            if (data) {
+                updateUI(data);
+            }
+        }
+
+        // 当前游戏状态
+        let currentState = 'start';
+
+        // 其他功能函数
+        function showAchievements() {
+            let msg = "当前得分：" + gameState.score + "\n";
+            if (gameState.achievements.size > 0) {
+                msg += "已获得成就：\n" + Array.from(gameState.achievements).join("\n");
+            } else {
+                msg += "还没有获得任何成就。";
+            }
+            alert(msg);
+        }
+
+        function confirmClearData() {
+            if (confirm("确定要清除所有成就和分数吗？")) {
+                gameState.achievements.clear();
+                gameState.score = 0;
+                document.getElementById('achievements').style.display = 'none';
+                alert("数据已清除！");
+            }
+        }
+
+        function showAbout() {
+            const aboutDiv = document.getElementById('about');
+            aboutDiv.innerHTML = `About OK School Life
+Version 0.4
+At home, May 30, 2025
+
+Hi, I'm Stiil Alive, in Chinese "还活着", the developer of this game.
+
+First of all, thank you for playing this game.
+This is a simple text-based game where you can choose your school life path.
+You can make choices, earn achievements, and see how your decisions affect your story.
+The game includes some lighthearted elements, as well as black humor elements.
+Most of the content is based on my own school life experiences, so it may not be suitable for everyone.
+And I'm trying to make it funnier, so there are some jokes in it.
+
+I'm a newbie developer, and this is my first game.
+To be honest, I don't know how to make a game. I just wanted to create a game that I would enjoy playing.
+I must say that so many people have helped me a lot, including my friends and classmates.
+They're WaiJade, lagency, 智心逍遥, sky, YaXuan, Tomato, GuoHao, and many others.
+Especially, WaiJade, the co-developer of this game, wants to say something:
+
+"I am WaiJade. 
+Thanks for developing this game, which has reignited my passion for programming. 
+I was primarily responsible for the script that automates the packaging of the game's executable file,
+and contributed a little to the event library. 
+Thank you for playing!"
+
+I also want to thank the Modern AI Technology, especially OpenAI, 
+for providing the tools and resources that made this game possible.
+I'd like to thank Github for hosting the source code and allowing me to share it with everyone.
+
+This game is open source, and you can find the source code on GitHub:
+https://github.com/still-alive-hhz/OK-School-Life
+The game is still in development, so there may be bugs or incomplete features.
+If you have any questions or suggestions, please feel free to contact me.
+
+Enjoy the game!
+
+<button onclick="hideAbout()">返回</button>`;
+            
+            aboutDiv.style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('message').style.display = 'none';
+            document.getElementById('options').style.display = 'none';
+            document.getElementById('achievements').style.display = 'none';
+            document.getElementById('bottom-options').style.display = 'none';
+        }
+
+        function hideAbout() {
+            document.getElementById('about').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('message').style.display = 'block';
+            document.getElementById('options').style.display = 'block';
+            document.getElementById('achievements').style.display = 'block';
+            document.getElementById('bottom-options').style.display = 'flex';
+        }
+
+        function restartGame() {
+            // 重置游戏状态
+            gameState.school = null;
+            gameState.eventIdx = 0;
+            gameState.stage = "fixed";
+            gameState.randomUsed.clear();
+            gameState.lastRandomIdx = null;
+            gameState.lastResult = "";
+            currentState = 'start';
+            
+            // 重新开始游戏
+            initGame();
+        }
+
+        // 初始化游戏
+        function initGame() {
+            // 使用示例数据（实际使用时需要加载真实的JSON文件）
+            gameData = sampleGameData;
+            
+            const data = {
+                message: `欢迎来到OK School Life beta ${gameState.version}！\n你将经历不同的事件和选择，看看你的学校生活会如何发展。`,
+                options: [
+                    {key: '1', text: '开始游戏'},
+                    {key: '2', text: '查看成就'},
+                    {key: '3', text: '清除数据'},
+                    {key: '4', text: '关于'},
+                    {key: '5', text: '退出'}
+                ]
+            };
+            
+            updateUI(data);
+        }
+
+        // 加载游戏数据并初始化
+        window.onload = function() {
+             fetch('data/events.json')
+                 .then(response => response.json())
+                 .then(data => {
+                     gameData = data;
+                     initGame();
+                 })
+                 .catch(error => {
+                     console.error('Error loading game data:', error);
+                     document.getElementById('loading').innerHTML = '<div class="error">加载游戏数据失败，请刷新页面重试</div>';
+                 });
+            
+            // 暂时使用示例数据
+            setTimeout(() => {
+                initGame();
+            }, 1000);
+        };
+    </script
