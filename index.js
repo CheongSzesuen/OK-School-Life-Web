@@ -11,9 +11,8 @@ const gameState = {
     },
     achievements: [],
     score: 0,
-    eventData: null,
-    version: "v0.4.0",
-    resultHistory: []
+    eventData: null, // 将从JSON加载的数据存储在这里
+    version: "v0.4.0"
 };
 
 // 辅助函数
@@ -67,7 +66,6 @@ function getRandomEvents() {
 
 // 游戏API函数
 function apiStartGame() {
-    gameState.resultHistory = [];
     return {
         message: `欢迎来到OK School Life beta ${gameState.version}！\n你将经历不同的事件和选择，看看你的学校生活会如何发展。`,
         options: [
@@ -362,26 +360,34 @@ function apiClearData() {
 
 // UI函数
 function updateUI(data) {
-    // 处理消息
+    let questionText = data.message || '';
     let resultText = '';
-    let nextQuestion = data.message || '';
-    
-    if (data.message && data.message.includes('\n')) {
-        const lastNewLineIndex = data.message.lastIndexOf('\n');
-        resultText = data.message.substring(0, lastNewLineIndex);
-        nextQuestion = data.message.substring(lastNewLineIndex + 1);
-    } else if (data.message) {
-        nextQuestion = data.message;
+    let nextQuestion = '';
+
+    if (questionText.includes('\n')) {
+        const idx = questionText.indexOf('\n');
+        resultText = questionText.slice(0, idx).trim();
+        nextQuestion = questionText.slice(idx + 1).trim();
+        
+        if (nextQuestion && !nextQuestion.startsWith('>>>')) {
+            const idx2 = nextQuestion.indexOf('\n');
+            if (idx2 !== -1) {
+                resultText += '\n' + nextQuestion.slice(0, idx2).trim();
+                nextQuestion = nextQuestion.slice(idx2 + 1).trim();
+            } else {
+                resultText += '\n' + nextQuestion;
+                nextQuestion = '';
+            }
+        }
+    } else {
+        resultText = questionText;
+        nextQuestion = '';
     }
-    
-    // 保存结果历史
-    if (resultText) {
-        gameState.resultHistory.push(resultText);
-    }
-    
-    // 更新显示区域
-    document.getElementById('result').textContent = gameState.resultHistory.join('\n\n') || '';
-    document.getElementById('message').textContent = nextQuestion || '';
+
+    if (resultText) gameState.lastResult = resultText;
+
+    document.getElementById('result').textContent = gameState.lastResult;
+    document.getElementById('message').textContent = nextQuestion;
 
     const optionsDiv = document.getElementById('options');
     const bottomOptionsDiv = document.getElementById('bottom-options');
@@ -570,6 +576,15 @@ function hideAbout() {
     document.getElementById('bottom-options').style.display = '';
 }
 
+function hideLoadingScreen() {
+    const loading = document.getElementById('loading-screen');
+    if (loading) {
+        loading.style.opacity = '0';
+        setTimeout(() => loading.style.display = 'none', 400);
+    }
+    document.querySelector('.game-container').style.display = '';
+}
+
 // 加载图片并返回Promise
 function preloadImage(src) {
     return new Promise((resolve, reject) => {
@@ -589,13 +604,14 @@ function loadGameData() {
                 return response.json();
             }),
         preloadImage('images/icons/icon-v4.png'),
-        preloadImage('https://raw.githubusercontent.com/CheongSzesuen/OK-School-Life-Web/main/images/welcome/mini/welcome-v4.png')
+        preloadImage('https://github.com/CheongSzesuen/OK-School-Life-Web/blob/main/images/welcome/mini/welcome-v4.png?raw=true')
     ])
     .then(([data]) => {
         gameState.eventData = data;
         gameState.version = data.metadata.version || "v0.4.0";
         const initData = apiStartGame();
         updateUI(initData);
+        hideLoadingScreen();
     })
     .catch(error => {
         console.error('Error loading game data:', error);

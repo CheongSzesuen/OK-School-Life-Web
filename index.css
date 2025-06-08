@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     max-width: 800px;
     margin: 0 auto;
-    padding: 15px;
+    padding: 20px;
     background-color: #9cd4a0;
     animation: fadeInBody 1.2s ease;
     min-height: 100vh;
@@ -17,48 +17,35 @@ body {
     to { opacity: 1; }
 }
 
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    .game-container {
+        margin-top: 5vw;
+        min-height: calc(100vh - 10vw);
+        width: calc(100% - 20px);
+        border-radius: 16px;
+        box-shadow: none;
+        padding: 15px;
+    }
+}
+
 .game-container {
     background-color: white;
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    margin: 2vh auto;
-    max-width: 90%;
-    width: 100%;
-    flex-grow: 1;
+    margin: 0 auto;
+    margin-top: 5vh;
+    max-width: 600px;
+    min-width: 0;
+    width: 90%;
+    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    min-height: auto;
-    max-height: 95vh;
-    overflow: auto;
-}
-
-@media (max-width: 600px) {
-    body {
-        padding: 8px;
-    }
-    .game-container {
-        margin: 10px auto;
-        padding: 15px;
-        max-width: 95%;
-        min-height: auto;
-    }
-    
-    .copyright {
-        font-size: 12px;
-        margin-top: 10px;
-        padding-bottom: 8px;
-    }
-    
-    button, .half-btn, .start-btn {
-        padding: 12px 16px;
-        font-size: 16px;
-    }
-    
-    .start-btn {
-        margin: 10px 0;
-    }
+    justify-content: flex-start;
+    min-height: 65vh;
 }
 
 .message {
