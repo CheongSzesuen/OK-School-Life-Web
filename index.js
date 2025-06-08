@@ -582,10 +582,7 @@ function hideLoadingScreen() {
         loading.style.opacity = '0';
         setTimeout(() => loading.style.display = 'none', 400);
     }
-    const gameContainer = document.querySelector('.game-container');
-    if (gameContainer) {
-        gameContainer.style.display = 'flex';
-    }
+    document.querySelector('.game-container').style.display = '';
 }
 
 // 加载图片并返回Promise
