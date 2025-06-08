@@ -1,36 +1,139 @@
-body {
-    font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #9cd4a0;
-    animation: fadeInBody 1.2s ease;
-    min-height: 100vh;
+/* ==== 全局样式和加载页面样式 ==== */
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
 }
 
-@keyframes fadeInBody {
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #4a9fe5, #8e44ad);
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* 加载页面样式 */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #1a1f25, #2c3e50);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.loading-content {
+    text-align: center;
+    transform: translateY(-50px);
+}
+
+.loading-icon {
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.loading-icon:after {
+    content: '';
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    background: url('https://raw.githubusercontent.com/still-alive-hhz/OK-School-Life/main/images/icons/icon-v4.png') center/contain no-repeat;
+    background-size: contain;
+}
+
+.loading-icon:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(#ff6b6b, #ffd166, #06d6a0, #118ab2, #073b4c);
+    animation: rotate 2.5s linear infinite;
+}
+
+.game-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(45deg, #ff6b6b, #ffd166, #06d6a0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textGlow 2s ease-in-out infinite;
+}
+
+.loading-text {
+    color: #e0e0e0;
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+.loading-bar {
+    width: 280px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.loading-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6b6b, #ffd166, #06d6a0);
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+.brand-text {
+    position: absolute;
+    bottom: 30px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+/* 加载动画 */
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes textGlow {
+    0%, 100% { filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8)); }
+    50% { filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8)); }
+}
+
+@keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-    .game-container {
-        margin-top: 5vw;
-        min-height: calc(100vh - 10vw);
-        width: calc(100% - 20px);
-        border-radius: 16px;
-        box-shadow: none;
-        padding: 15px;
-    }
-}
-
+/* 游戏容器 - 初始隐藏 */
 .game-container {
     background-color: white;
     padding: 25px;
@@ -46,8 +149,13 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     min-height: 65vh;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    z-index: 10;
 }
 
+/* ==== 原始游戏界面样式 ==== */
 .message {
     margin-bottom: 20px;
     padding: 15px;
@@ -98,7 +206,7 @@ button:hover, .half-btn:hover, .start-btn:hover {
     box-shadow: 0 6px 18px rgba(25, 118, 210, 0.18);
 }
 
-button:active, .half-btn:active, .start-btn:active {
+button:active, .half-btn:active, .start极客:active {
     background: #0d47a1;
     transform: scale(0.97);
 }
@@ -107,7 +215,7 @@ button:active, .half-btn:active, .start-btn:active {
     margin-top: 20px;
     padding: 10px;
     background-color: #fffacd;
-    border-radius: 5px;
+    border-radius: 5极客;
     max-height: 180px;
     overflow-y: auto;
     animation: fadeInAchievements 1.2s 0.3s backwards;
@@ -192,7 +300,48 @@ button:active, .half-btn:active, .start-btn:active {
     padding-bottom: 6px;
 }
 
+/* ==== 响应式设计 ==== */
+@media (max-width: 768px) {
+    .loading-content {
+        padding: 0 20px;
+    }
+    
+    .loading-icon {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .game-title {
+        font-size: 2rem;
+    }
+    
+    .loading-text {
+        font-size: 1rem;
+    }
+    
+    .game-container {
+        margin-top: 5vw;
+        min-height: calc(100vh - 10vw);
+        width: calc(100% - 20px);
+        border-radius: 16px;
+        box-shadow: none;
+        padding: 15px;
+    }
+}
+
 @media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .game-title {
+        font-size: 1.8rem;
+    }
+    
+    .loading-bar {
+        width: 220px;
+    }
+    
     .copyright {
         font-size: 12px;
         margin-top: 18px;
@@ -233,5 +382,15 @@ button:active, .half-btn:active, .start-btn:active {
         flex: 1;
         min-width: 120px;
         max-width: 240px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 1.8rem;
+    }
+    
+    .loading-bar {
+        width: 220px;
     }
 }
