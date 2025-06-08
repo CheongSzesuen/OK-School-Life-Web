@@ -599,7 +599,7 @@ function hideAbout() {
 
 // 加载JSON数据并初始化游戏
 function loadGameData() {
-    fetch('data/events.json')
+    fetch('https://raw.githubusercontent.com/CheongSzesuen/OK-School-Life-Web/refs/heads/main/data/events.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP错误! 状态: ${response.status}`);
