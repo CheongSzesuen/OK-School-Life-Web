@@ -1,101 +1,163 @@
-body {
-    font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #9cd4a0;
-    animation: fadeInBody 1.2s ease;
+/* 基础样式 - 优化加载性能 */
+:root {
+    --primary-color: #1976d2;
+    --primary-hover: #1565c0;
+    --primary-active: #0d47a1;
+    --bg-color: #9cd4a0;
+    --card-bg: white;
+    --text-color: #333;
+    --animation-duration: 0.3s;
+  }
+  
+  /* 关键渲染路径样式 - 最先加载 */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     min-height: 100vh;
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-}
-@media (max-width: 600px) {
-    body {
-        padding: 0;
-        background-color: #9cd4a0;
-    }
-    .game-container {
-        margin-top: 4vw;
-        min-height: 0;
-        max-width: 100vw;
-        width: 100vw;
-        height: 100vw;
-        border-radius: 0 0 16px 16px;
-        box-shadow: none;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: stretch;
-    }
-}
-.game-container {
-    background-color: white;
+    will-change: opacity;
+    animation: fadeInBody 1.2s ease;
+  }
+  
+  /* 首屏关键元素初始状态 */
+  .game-container, 
+  .main-title, 
+  #cover-img, 
+  #message {
+    opacity: 0;
+    will-change: opacity;
+  }
+  
+  /* 加载完成后显示 */
+  body.loaded .game-container,
+  body.loaded .main-title,
+  body.loaded #cover-img,
+  body.loaded #message {
+    opacity: 1;
+    transition: opacity var(--animation-duration) ease;
+  }
+  
+  /* 游戏容器 - 优化移动端体验 */
+  .game-container {
+    background-color: var(--card-bg);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    margin: 0 auto;
-    margin-top: 5vh;
+    margin: 5vh auto 0;
     max-width: 600px;
-    min-width: 0;
-    width: 100%;
+    width: calc(100% - 40px);
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     min-height: 55vh;
-    /* 桌面端为长方形，移动端正方形由媒体查询控制 */
-}
-.message {
+    will-change: transform, opacity;
+  }
+  
+  /* 消息框动画优化 */
+  .message {
     margin-bottom: 20px;
     padding: 15px;
     background-color: #f0f8ff;
     border-radius: 5px;
     animation: slideInMessage 0.8s;
-}
-@keyframes slideInMessage {
-    from { opacity: 0; transform: translateY(20px);}
-    to { opacity: 1; transform: translateY(0);}
-}
-.options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.options-row {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    justify-content: space-between;
-    width: 100%;
-    flex-wrap: wrap;
-}
-button, .half-btn, .start-btn {
+    will-change: transform, opacity;
+  }
+  
+  @keyframes slideInMessage {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* 按钮系统 - GPU加速 */
+  button, .half-btn, .start-btn {
     padding: 10px 24px;
-    background: #1976d2;
-    color: #fff;
+    background: var(--primary-color);
+    color: white;
     border: none;
     border-radius: 8px;
     font-size: 14px;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     cursor: pointer;
-    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    transition: all var(--animation-duration) ease;
     box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
     outline: none;
     white-space: nowrap;
     position: relative;
-}
-button:hover, .half-btn:hover, .start-btn:hover {
-    background: #1565c0;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  button:hover, 
+  .half-btn:hover, 
+  .start-btn:hover {
+    background: var(--primary-hover);
     transform: translateY(-3px) scale(1.04);
     box-shadow: 0 6px 18px rgba(25, 118, 210, 0.18);
-}
-button:active, .half-btn:active, .start-btn:active {
-    background: #0d47a1;
+  }
+  
+  button:active, 
+  .half-btn:active, 
+  .start-btn:active {
+    background: var(--primary-active);
     transform: scale(0.97);
-}
-.achievements {
+  }
+  
+  /* 布局优化 */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .options-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  /* 标题动画 - 性能优化 */
+  .main-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: titlePop 1s cubic-bezier(.68,-0.55,.27,1.55);
+    backface-visibility: hidden;
+  }
+  
+  @keyframes titlePop {
+    0% { transform: scale(0.7); opacity: 0; }
+    60% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  
+  /* 移动端适配 - 优化触控体验 */
+  @media (max-width: 600px) {
+    body {
+      padding: 0;
+    }
+    
+    .game-container {
+      margin-top: 4vw;
+      border-radius: 0 0 16px 16px;
+      box-shadow: none;
+      width: 100vw;
+      min-height: calc(100vh - 4vw);
+    }
+    
+    button, .half-btn, .start-btn {
+      padding: 12px 16px;
+      min-width: 120px;
+    }
+  }
+  
+  /* 成就列表 - 滚动性能优化 */
+  .achievements {
     margin-top: 20px;
     padding: 10px;
     background-color: #fffacd;
@@ -103,91 +165,37 @@ button:active, .half-btn:active, .start-btn:active {
     max-height: 180px;
     overflow-y: auto;
     animation: fadeInAchievements 1.2s 0.3s backwards;
-}
-@keyframes fadeInAchievements {
-    from { opacity: 0; transform: translateY(30px);}
-    to { opacity: 1; transform: translateY(0);}
-}
-#achievements-list p {
-    margin: 0 0 6px 0;
-    font-size: 15px;
-}
-#about {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 12px;
-    color: #333;
-}
-.main-btns {
-    width: fit-content;
-    margin: 0 auto;
-    min-width: 320px;
-    max-width: 100%;
-}
-#options {
-    width: 100%;
-}
-.start-btn {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    display: block;
-    margin: 20px 0 0 0;
-    box-sizing: border-box;
-    font-size: 15px;
-    padding: 10px 20px;
-    white-space: nowrap;
-}
-.half-btn {
-    flex: 1 1 0;
-    min-width: 100px;
-    max-width: 220px;
-    padding: 10px 20px;
-    font-size: 15px;
-    box-sizing: border-box;
-    white-space: nowrap;
-}
-.main-title {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    animation: titlePop 1s cubic-bezier(.68,-0.55,.27,1.55);
-}
-@keyframes titlePop {
-    0% { transform: scale(0.7); opacity: 0; }
-    60% { transform: scale(1.1); opacity: 1; }
-    100% { transform: scale(1); }
-}
-.subtitle {
-    font-size: 18px;
-    color: #71B988;
-    font-weight: normal;
-}
-.copyright {
+    will-change: transform, opacity;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  @keyframes fadeInAchievements {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* 版权信息 - 防止布局偏移 */
+  .copyright {
     position: fixed;
+    bottom: 10px;
     left: 0;
     right: 0;
-    bottom: 10px;
     text-align: center;
     color: #888;
     font-size: 11px;
-    letter-spacing: 0.5px;
-    user-select: none;
-    opacity: 0.85;
-    z-index: 100;
-    background: transparent;
-    pointer-events: none;
     line-height: 1.5;
-}
-.copyright a {
+    z-index: 100;
+    pointer-events: none;
+  }
+  
+  .copyright a {
+    pointer-events: auto;
     color: #71B988;
     text-decoration: underline;
-    font-size: 11px;
-    pointer-events: auto;
-}
-@media (max-width: 600px) {
-    .copyright {
-        font-size: 10px;
-        padding-bottom: 6px;
-        bottom: 4px;
-    }
-}
+  }
+  
+  /* 初始动画 */
+  @keyframes fadeInBody {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }

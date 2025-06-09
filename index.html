@@ -1,27 +1,46 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>OK School Life</title>
-    <link rel="apple-touch-icon" sizes="57x57" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/favicon-16x16.png">
-<link rel="manifest" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/manifest.json">
-    <!-- 元数据保持不变 -->
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/ms-icon-144x144.png">
-<meta name="theme-color" content="#ffffff">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/index.css">
-</head>
+    <head>
+        <title>OK School Life</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+    
+        <!-- 预加载关键CSS -->
+        <link rel="preload" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/index.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/index.css"></noscript>
+    
+        <!-- 预加载关键JS -->
+        <link rel="preload" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/index.js" as="script" crossorigin>
+    
+        <!-- 预加载首屏关键图片 -->
+        <link rel="preload" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/welcome/mini/welcome-v4.png" as="image" type="image/png">
+        <link rel="preload" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/icon-v4.png" as="image" type="image/png">
+    
+        <!-- 所有图标加速 -->
+        <link rel="apple-touch-icon" sizes="57x57" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/favicon-16x16.png">
+        <link rel="manifest" href="https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web@main/images/icons/standard/manifest.json">
+    
+        <!-- 性能优化meta -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    </head>
 <body>
     <div class="game-container">
         <h1 class="main-title"> 
