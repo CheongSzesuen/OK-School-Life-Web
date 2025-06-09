@@ -1,3 +1,4 @@
+// 内置的游戏数据 - 将你的 events.json 内容替换到这里
 const EMBEDDED_GAME_DATA = {
     "metadata": {
       "contributors": {
@@ -1179,7 +1180,6 @@ const EMBEDDED_GAME_DATA = {
     }
   };
 
-// 游戏状态
 const gameState = {
     currentApi: '/api/choose_start',
     lastResult: "",
@@ -1193,7 +1193,7 @@ const gameState = {
     },
     achievements: [],
     score: 0,
-    eventData: EMBEDDED_GAME_DATA,
+    eventData: EMBEDDED_GAME_DATA, // 直接使用内置数据
     version: EMBEDDED_GAME_DATA.metadata.version || "v0.4.0"
 };
 
@@ -1249,56 +1249,18 @@ function getRandomEvents() {
 // 游戏API函数
 function apiStartGame() {
     return {
-        result: "",
-        question: `欢迎来到OK School Life beta ${gameState.version}！\n你将经历不同的事件和选择，看看你的学校生活会如何发展。`,
+        message: `欢迎来到OK School Life beta ${gameState.version}！\n你将经历不同的事件和选择，看看你的学校生活会如何发展。`,
         options: [
-            { key: '1', text: '开始游戏', icon: 'fas fa-play' },
-            { key: '2', text: '查看成就', icon: 'fas fa-trophy' },
-            { key: '3', text: '清除数据', icon: 'fas fa-trash-alt' },
-            { key: '4', text: '关于', icon: 'fas fa-info-circle' },
-            { key: '5', text: '退出', icon: 'fas fa-door-open' }
-        ],
-        start_event: ""
+            { key: '1', text: '开始游戏' },
+            { key: '2', text: '查看成就' },
+            { key: '3', text: '清除数据' },
+            { key: '4', text: '关于' },
+            { key: '5', text: '退出' }
+        ]
     };
 }
 
 function apiChooseStart(choice) {
-    if (choice === '5') {
-        return {
-            result: "感谢游玩！",
-            question: '期待下次再见！',
-            game_over: true
-        };
-    }
-    
-    if (choice === '2') {
-        return {
-            result: "成就系统",
-            question: apiGetAchievements().message,
-            options: [{ key: '1', text: '返回', icon: 'fas fa-arrow-left' }],
-            back_to_start: true
-        };
-    }
-    
-    if (choice === '3') {
-        apiClearData();
-        return {
-            result: "数据已清除",
-            question: "所有游戏数据已重置！",
-            options: [{ key: '1', text: '返回', icon: 'fas fa-arrow-left' }],
-            back_to_start: true
-        };
-    }
-    
-    if (choice === '4') {
-        return {
-            result: "关于OK School Life",
-            question: "版本: " + gameState.version + "\n开发者: StillAlive & WaiJade\n一款基于真实校园生活体验的文字冒险游戏。玩家将做出各种选择，这些选择会影响你在学校的命运。",
-            options: [{ key: '1', text: '返回', icon: 'fas fa-arrow-left' }],
-            back_to_start: true
-        };
-    }
-
     gameState.userState = {
         school: null,
         eventIdx: 0,
@@ -1306,18 +1268,23 @@ function apiChooseStart(choice) {
         randomUsed: new Set(),
         lastRandomIdx: null
     };
-    gameState.lastResult = "";
+
+    if (choice === '5') {
+        return {
+            message: '感谢游玩，期待下次再见！',
+            game_over: true
+        };
+    }
 
     const eventList = getEventList();
     const startEvent = weightedRandom(eventList, [0.2, 0.5, 0.3]);
     
     return {
-        result: startEvent,
-        question: "你中考考得很好，现在可以选择学校。",
+        message: `${startEvent}。\n你中考考得很好，现在可以选择学校。`,
         options: [
-            { key: '1', text: '羊县中学', icon: 'fas fa-school' },
-            { key: '2', text: '闪西省汗忠中学', icon: 'fas fa-graduation-cap' },
-            { key: '3', text: '汗忠市龙港高级中学', icon: 'fas fa-university' }
+            { key: '1', text: '羊县中学' },
+            { key: '2', text: '闪西省汗忠中学' },
+            { key: '3', text: '汗忠市龙港高级中学' }
         ],
         start_event: startEvent,
         next_event: 'choose_school'
@@ -1333,13 +1300,6 @@ function apiChooseSchool(school, startEvent) {
         lastRandomIdx: null
     };
 
-    // 更新学校横幅
-    const banner = document.getElementById('school-banner');
-    const schoolName = gameState.eventData.metadata.schools[school];
-    banner.innerHTML = schoolName;
-    banner.style.background = gameState.eventData.metadata.school_banners[school] || 
-                             "linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), #2c3e50";
-
     let eventList;
     if (school === '1') {
         eventList = getGroupEvents("group_1");
@@ -1348,123 +1308,121 @@ function apiChooseSchool(school, startEvent) {
     } else if (school === '3') {
         eventList = getGroupEvents("group_3");
     } else {
-        return { question: '未知学校', game_over: true };
+        return { message: '未知学校', game_over: true };
     }
 
     const event = eventList[0];
+    let msg, options;
+    
+    if (typeof event === 'object') {
+        msg = event.question + getContributorStr(event);
+        options = Object.entries(event.choices).map(([key, text]) => ({ key, text }));
+    } else {
+        msg = event;
+        options = [];
+    }
     
     return {
-        result: startEvent,
-        question: event.question + getContributorStr(event),
-        options: Object.entries(event.choices).map(([key, text]) => ({ 
-            key, 
-            text,
-            icon: key === '1' ? 'fas fa-1' : key === '2' ? 'fas fa-2' : 'fas fa-3'
-        })),
+        message: msg,
+        options,
         next_event: 'school_event'
     };
 }
 
 function apiSchoolEvent(choice) {
     const { school, eventIdx } = gameState.userState;
-    let eventList;
+    let eventListNow;
     
     if (school === '1') {
-        eventList = getGroupEvents("group_1");
+        eventListNow = getGroupEvents("group_1");
     } else if (school === '2') {
-        eventList = getGroupEvents("group_2");
+        eventListNow = getGroupEvents("group_2");
     } else if (school === '3') {
-        eventList = getGroupEvents("group_3");
+        eventListNow = getGroupEvents("group_3");
     } else {
-        return { question: '未知学校', game_over: true };
+        return { message: '未知学校', game_over: true };
     }
 
-    const event = eventList[eventIdx];
-    if (!event) {
-        return { question: '事件不存在', game_over: true };
-    }
-    
-    const choiceResult = event.results[choice];
-    if (!choiceResult) {
-        return {
-            result: "无效选择",
-            question: event.question + getContributorStr(event),
-            options: Object.entries(event.choices).map(([key, text]) => ({ key, text })),
-            next_event: 'school_event'
-        };
-    }
-    
-    const resultObj = pickResult(choiceResult);
-    const result = resultObj.text;
-    const isEnd = resultObj.endGame || (event.end_game_choices && event.end_game_choices.includes(choice));
-    
-    const achievementsDict = event.achievements || {};
+    const event = eventListNow[eventIdx];
+    let result, isEnd, msg, options, achievementsDict, endGameChoices;
     const triggeredAchievements = [];
     
-    if (achievementsDict[choice]) {
-        triggeredAchievements.push(achievementsDict[choice]);
-        if (!gameState.achievements.includes(achievementsDict[choice])) {
-            gameState.achievements.push(achievementsDict[choice]);
+    if (typeof event === 'object') {
+        const picked = pickResult(event.results[choice]);
+        result = picked.text;
+        isEnd = picked.endGame;
+        msg = event.question + getContributorStr(event);
+        options = Object.entries(event.choices).map(([key, text]) => ({ key, text }));
+        achievementsDict = event.achievements || {};
+        endGameChoices = event.end_game_choices || [];
+        
+        if (achievementsDict[choice]) {
+            triggeredAchievements.push(achievementsDict[choice]);
+            if (!gameState.achievements.includes(achievementsDict[choice])) {
+                gameState.achievements.push(achievementsDict[choice]);
+            }
         }
+    } else {
+        result = "";
+        isEnd = false;
+        msg = event;
+        options = [];
+        achievementsDict = {};
+        endGameChoices = [];
     }
 
-    if (isEnd) {
+    if (isEnd || endGameChoices.includes(choice)) {
         return {
-            result: result,
-            question: "你失败了，游戏结束！",
+            message: result + "\n你失败了，游戏结束！",
             game_over: true,
             achievements: triggeredAchievements
         };
     }
 
+    gameState.userState.eventIdx += 1;
     gameState.score += 1;
-    const nextEventIdx = eventIdx + 1;
-    
-    if (nextEventIdx < eventList.length) {
-        const nextEvent = eventList[nextEventIdx];
-        gameState.userState.eventIdx = nextEventIdx;
+
+    if (gameState.userState.eventIdx < eventListNow.length) {
+        const nextEvent = eventListNow[gameState.userState.eventIdx];
+        let nextMsg, nextOptions;
+        
+        if (typeof nextEvent === 'object') {
+            nextMsg = nextEvent.question + getContributorStr(nextEvent);
+            nextOptions = Object.entries(nextEvent.choices).map(([key, text]) => ({ key, text }));
+        } else {
+            nextMsg = nextEvent;
+            nextOptions = [];
+        }
         
         return {
-            result: result,
-            question: nextEvent.question + getContributorStr(nextEvent),
-            options: Object.entries(nextEvent.choices).map(([key, text]) => ({ 
-                key, 
-                text,
-                icon: key === '1' ? 'fas fa-1' : key === '2' ? 'fas fa-2' : 'fas fa-3'
-            })),
+            message: result + "\n" + nextMsg,
+            options: nextOptions,
             next_event: 'school_event',
             achievements: triggeredAchievements
         };
     } else {
         gameState.userState.stage = "random";
-        gameState.userState.eventIdx = 0;
-        
         const randomEvents = getRandomEvents();
-        const unusedIndices = [...Array(randomEvents.length).keys()]
+        const unused = [...Array(randomEvents.length).keys()]
             .filter(i => !gameState.userState.randomUsed.has(i));
         
-        if (unusedIndices.length === 0) {
+        if (unused.length === 0) {
             return {
-                result: result,
-                question: "所有事件已完成，游戏结束！",
-                game_over: true,
-                achievements: triggeredAchievements
+                message: result + "\n所有事件已完成，游戏结束！",
+                achievements: triggeredAchievements,
+                game_over: true
             };
         }
         
-        const randomIndex = unusedIndices[Math.floor(Math.random() * unusedIndices.length)];
-        gameState.userState.randomUsed.add(randomIndex);
-        gameState.userState.lastRandomIdx = randomIndex;
-        const randomEvent = randomEvents[randomIndex];
+        const idx = unused[Math.floor(Math.random() * unused.length)];
+        gameState.userState.randomUsed.add(idx);
+        const event = randomEvents[idx];
+        msg = event.question + getContributorStr(event);
+        options = Object.entries(event.choices).map(([key, text]) => ({ key, text }));
         
         return {
-            result: result,
-            question: randomEvent.question + getContributorStr(randomEvent),
-            options: Object.entries(randomEvent.choices).map(([key, text]) => ({ 
-                key, 
-                text,
-                icon: key === '1' ? 'fas fa-1' : key === '2' ? 'fas fa-2' : 'fas fa-3'
-            })),
+            message: result + "\n" + msg,
+            options,
             next_event: 'random_event',
             achievements: triggeredAchievements
         };
@@ -1473,50 +1431,55 @@ function apiSchoolEvent(choice) {
 
 function apiRandomEvent(choice) {
     const randomEvents = getRandomEvents();
-    let lastRandomIdx = gameState.userState.lastRandomIdx;
     
-    if (lastRandomIdx === null || lastRandomIdx >= randomEvents.length) {
-        // 如果没有当前随机事件，先选择一个
-        const unusedIndices = [...Array(randomEvents.length).keys()]
+    if (choice === undefined || gameState.userState.lastRandomIdx === null) {
+        const unused = [...Array(randomEvents.length).keys()]
             .filter(i => !gameState.userState.randomUsed.has(i));
         
-        if (unusedIndices.length === 0) {
-            return {
-                result: "所有事件已完成",
-                question: "恭喜你完成了所有随机事件！游戏结束！",
-                game_over: true
-            };
+        if (unused.length === 0) {
+            return { message: '所有事件已完成，游戏结束！', game_over: true };
         }
         
-        const randomIndex = unusedIndices[Math.floor(Math.random() * unusedIndices.length)];
-        gameState.userState.lastRandomIdx = randomIndex;
-        const event = randomEvents[randomIndex];
+        const idx = unused[Math.floor(Math.random() * unused.length)];
+        gameState.userState.lastRandomIdx = idx;
+        const event = randomEvents[idx];
+        const msg = event.question + getContributorStr(event);
+        const options = Object.entries(event.choices).map(([key, text]) => ({ key, text }));
         
         return {
-            result: "",
-            question: event.question + getContributorStr(event),
-            options: Object.entries(event.choices).map(([key, text]) => ({ key, text })),
+            message: msg,
+            options,
             next_event: 'random_event'
         };
     }
-    
-    // 处理当前随机事件的选择
-    const event = randomEvents[lastRandomIdx];
-    const choiceResult = event.results[choice];
-    
-    if (!choiceResult) {
+
+    const idx = gameState.userState.lastRandomIdx;
+    if (idx === null) {
+        const unused = [...Array(randomEvents.length).keys()]
+            .filter(i => !gameState.userState.randomUsed.has(i));
+        
+        if (unused.length === 0) {
+            return { message: '所有事件已完成，游戏结束！', game_over: true };
+        }
+        
+        const newIdx = unused[Math.floor(Math.random() * unused.length)];
+        gameState.userState.lastRandomIdx = newIdx;
+        const event = randomEvents[newIdx];
+        const msg = event.question + getContributorStr(event);
+        const options = Object.entries(event.choices).map(([key, text]) => ({ key, text }));
+        
         return {
-            result: "无效选择",
-            question: event.question + getContributorStr(event),
-            options: Object.entries(event.choices).map(([key, text]) => ({ key, text })),
+            message: msg,
+            options,
             next_event: 'random_event'
         };
     }
-    
-    const resultObj = pickResult(choiceResult);
-    const result = resultObj.text;
-    const isEnd = resultObj.endGame || (event.end_game_choices && event.end_game_choices.includes(choice));
-    
+
+    const event = randomEvents[idx];
+    const picked = pickResult(event.results[choice]);
+    const result = picked.text;
+    const isEnd = picked.endGame;
+    const endGameChoices = event.end_game_choices || [];
     const achievementsDict = event.achievements || {};
     const triggeredAchievements = [];
     
@@ -1527,141 +1490,163 @@ function apiRandomEvent(choice) {
         }
     }
 
-    gameState.userState.randomUsed.add(lastRandomIdx);
-    
-    if (isEnd) {
+    if (isEnd || endGameChoices.includes(choice)) {
+        gameState.userState.randomUsed.add(idx);
         return {
-            result: result,
-            question: "游戏结束！",
+            message: result + "\n游戏结束！",
             game_over: true,
             achievements: triggeredAchievements
         };
     }
 
+    gameState.userState.randomUsed.add(idx);
     gameState.score += 1;
-    const unusedIndices = [...Array(randomEvents.length).keys()]
+    
+    const unused = [...Array(randomEvents.length).keys()]
         .filter(i => !gameState.userState.randomUsed.has(i));
     
-    if (unusedIndices.length === 0) {
+    if (unused.length === 0) {
         return {
-            result: result,
-            question: "所有事件已完成，游戏结束！",
-            game_over: true,
-            achievements: triggeredAchievements
+            message: result + "\n所有事件已完成，游戏结束！",
+            achievements: triggeredAchievements,
+            game_over: true
         };
     }
     
-    const randomIndex = unusedIndices[Math.floor(Math.random() * unusedIndices.length)];
-    gameState.userState.lastRandomIdx = randomIndex;
-    const nextEvent = randomEvents[randomIndex];
+    const nextIdx = unused[Math.floor(Math.random() * unused.length)];
+    gameState.userState.lastRandomIdx = nextIdx;
+    const nextEvent = randomEvents[nextIdx];
+    const msg = nextEvent.question + getContributorStr(nextEvent);
+    const options = Object.entries(nextEvent.choices).map(([key, text]) => ({ key, text }));
     
     return {
-        result: result,
-        question: nextEvent.question + getContributorStr(nextEvent),
-        options: Object.entries(nextEvent.choices).map(([key, text]) => ({ 
-            key, 
-            text,
-            icon: key === '1' ? 'fas fa-1' : key === '2' ? 'fas fa-2' : 'fas fa-3'
-        })),
+        message: result + "\n" + msg,
+        options,
         next_event: 'random_event',
         achievements: triggeredAchievements
     };
 }
 
 function apiGetAchievements() {
-    let msg = "当前得分：" + gameState.score + "\n";
-    
-    if (gameState.achievements.length > 0) {
-        msg += "已获得成就：\n- " + gameState.achievements.join("\n- ");
-    } else {
-        msg += "还没有获得任何成就。";
-    }
-    
-    return { message: msg };
+    return {
+        score: gameState.score,
+        achievements: gameState.achievements
+    };
 }
 
 function apiClearData() {
     gameState.achievements = [];
     gameState.score = 0;
-    gameState.allAchievements.clear();
     return { message: '数据已清除！' };
 }
 
-// UI更新函数
+// UI函数
 function updateUI(data) {
-    if (data.result) {
-        gameState.lastResult = data.result;
-        document.getElementById('result').textContent = data.result;
+    let questionText = data.message || '';
+    let resultText = '';
+    let nextQuestion = '';
+
+    if (questionText.includes('\n')) {
+        const idx = questionText.indexOf('\n');
+        resultText = questionText.slice(0, idx).trim();
+        nextQuestion = questionText.slice(idx + 1).trim();
+        
+        if (nextQuestion && !nextQuestion.startsWith('>>>')) {
+            const idx2 = nextQuestion.indexOf('\n');
+            if (idx2 !== -1) {
+                resultText += '\n' + nextQuestion.slice(0, idx2).trim();
+                nextQuestion = nextQuestion.slice(idx2 + 1).trim();
+            } else {
+                resultText += '\n' + nextQuestion;
+                nextQuestion = '';
+            }
+        }
+    } else {
+        resultText = questionText;
+        nextQuestion = '';
     }
-    
-    if (data.question) {
-        document.getElementById('message').textContent = data.question;
-    }
-    
+
+    if (resultText) gameState.lastResult = resultText;
+
+    document.getElementById('result').textContent = gameState.lastResult;
+    document.getElementById('message').textContent = nextQuestion;
+
     const optionsDiv = document.getElementById('options');
     const bottomOptionsDiv = document.getElementById('bottom-options');
     optionsDiv.innerHTML = '';
     bottomOptionsDiv.innerHTML = '';
-    
-    // 显示成就
-    if (data.achievements && data.achievements.length > 0) {
-        const achievementsList = document.getElementById('achievements-list');
-        
-        data.achievements.forEach(achievement => {
-            if (!gameState.allAchievements.has(achievement)) {
-                gameState.allAchievements.add(achievement);
-                
-                const badge = document.createElement('div');
-                badge.className = 'achievement-badge new-achievement';
-                badge.textContent = achievement;
-                achievementsList.appendChild(badge);
-                
-                // 3秒后移除新成就动画
-                setTimeout(() => {
-                    badge.classList.remove('new-achievement');
-                }, 3000);
+
+    if (data.options) {
+        const bottomBtns = [];
+        data.options.forEach((optionObj, idx) => {
+            if (
+                optionObj.text === '关于' ||
+                optionObj.text === '退出' ||
+                optionObj.text === '查看成就' ||
+                optionObj.text === '清除数据'
+            ) {
+                bottomBtns.push({option: optionObj.text, key: optionObj.key});
+            } else {
+                const button = document.createElement('button');
+                button.textContent = optionObj.text;
+                if (optionObj.text === '开始游戏') {
+                    button.className = 'start-btn';
+                }
+                button.onclick = () => makeChoice(optionObj.key, data.start_event);
+                optionsDiv.appendChild(button);
             }
+        });
+        
+        bottomBtns.forEach(({option, key}) => {
+            const button = document.createElement('button');
+            button.textContent = option;
+            button.className = 'half-btn';
+            if (option === '关于') {
+                button.onclick = showAbout;
+            } else if (option === '退出') {
+                button.onclick = () => makeChoice(key, data.start_event);
+            } else if (option === '查看成就') {
+                button.onclick = showAchievements;
+            } else if (option === '清除数据') {
+                button.onclick = confirmClearData;
+            }
+            bottomOptionsDiv.appendChild(button);
         });
     }
     
     if (data.game_over) {
         const button = document.createElement('button');
         button.textContent = '重新开始';
-        button.classList.add('start-btn');
-        button.innerHTML = '<i class="fas fa-redo-alt"></i>重新开始';
         button.onclick = () => window.location.reload();
         optionsDiv.appendChild(button);
-        return;
+    }
+    
+    if (data.achievements) {
+        const achievementsDiv = document.getElementById('achievements');
+        const listDiv = document.getElementById('achievements-list');
+        let hasNew = false;
+        
+        data.achievements.forEach(achievement => {
+            if (!gameState.allAchievements.has(achievement)) hasNew = true;
+            gameState.allAchievements.add(achievement);
+        });
+        
+        if (gameState.allAchievements.size > 0) {
+            listDiv.innerHTML = '';
+            Array.from(gameState.allAchievements).reverse().forEach(achievement => {
+                const p = document.createElement('p');
+                p.textContent = achievement;
+                listDiv.appendChild(p);
+            });
+            achievementsDiv.style.display = 'block';
+        }
     }
 
-    if (data.options) {
-        const bottomBtns = [];
-        data.options.forEach(optionObj => {
-            const button = document.createElement('button');
-            
-            if (optionObj.icon) {
-                button.innerHTML = `<i class="${optionObj.icon}"></i>${optionObj.text}`;
-            } else {
-                button.textContent = optionObj.text;
-            }
-            
-            button.onclick = () => {
-                if (data.back_to_start) {
-                    // 返回开始界面
-                    const startData = apiStartGame();
-                    updateUI(startData);
-                    gameState.currentApi = '/api/choose_start';
-                } else {
-                    makeChoice(optionObj.key, data.start_event);
-                }
-            };
-            
-            if (optionObj.text === '开始游戏' || optionObj.text === '重新开始') {
-                button.classList.add('start-btn');
-            }
-            
-            optionsDiv.appendChild(button);
-        });
+    const coverImg = document.getElementById('cover-img');
+    if (gameState.currentApi === '/api/choose_start') {
+        coverImg.style.display = 'block';
+    } else {
+        coverImg.style.display = 'none';
     }
 }
 
@@ -1695,13 +1680,123 @@ function makeChoice(choice, startEvent=null) {
         gameState.currentApi = '/api/choose_school';
     } else if (data.game_over) {
         gameState.currentApi = '/api/choose_start';
-    } else {
-        gameState.currentApi = '/api/choose_start';
     }
 }
 
+function showAchievements() {
+    const data = apiGetAchievements();
+    let msg = "当前得分：" + data.score + "\n";
+    
+    if (data.achievements.length > 0) {
+        msg += "已获得成就：\n" + data.achievements.join("\n");
+    } else {
+        msg += "还没有获得任何成就。";
+    }
+    
+    alert(msg);
+}
+
+function confirmClearData() {
+    if (confirm("确定要清除所有成就和分数吗？")) {
+        const data = apiClearData();
+        alert(data.message);
+    }
+}
+
+function showAbout() {
+    const aboutDiv = document.getElementById('about');
+    aboutDiv.innerHTML = `<pre style="white-space:pre-line;">About OK School Life
+Version ${gameState.version}
+At home, May 30, 2025
+
+Hi, I'm Stiil Alive, in Chinese "还活着", the developer of this game.
+
+First of all, thank you for playing this game.
+This is a simple text-based game where you can choose your school life path.
+You can make choices, earn achievements, and see how your decisions affect your story.
+The game includes some lighthearted elements, as well as black humor elements.
+Most of the content is based on my own school life experiences, so it may not be suitable for everyone.
+And I'm trying to make it funnier, so there are some jokes in it.
+
+I'm a newbie developer, and this is my first game.
+To be honest, I don't know how to make a game. I just wanted to create a game that I would enjoy playing.
+I must say that so many people have helped me a lot, including my friends and classmates.
+They're WaiJade, lagency, 智心逍遥, sky, YaXuan, Tomato, GuoHao, and many others.
+Especially, WaiJade, the co-developer of this game, wants to say something:
+
+"I am WaiJade. 
+Thanks for developing this game, which has reignited my passion for programming. 
+I was primarily responsible for the script that automates the packaging of the game's executable file,
+and contributed a little to the event library. 
+Thank you for playing!"
+
+I also want to thank the Modern AI Technology, especially OpenAI, 
+for providing the tools and resources that made this game possible.
+I'd like to thank Github for hosting the source code and allowing me to share it with everyone.
+
+This game is open source, and you can find the source code on GitHub:
+https://github.com/still-alive-hhz/OK-School-Life
+The game is still in development, so there may be bugs or incomplete features.
+If you have any questions or suggestions, please feel free to contact me.
+
+Enjoy the game!</pre>
+<button onclick="hideAbout()">返回</button>`;
+    aboutDiv.style.display = 'block';
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('message').style.display = 'none';
+    document.getElementById('options').style.display = 'none';
+    document.getElementById('achievements').style.display = 'none';
+    document.getElementById('bottom-options').style.display = 'none';
+}
+
+function hideAbout() {
+    document.getElementById('about').style.display = 'none';
+    document.getElementById('result').style.display = '';
+    document.getElementById('message').style.display = '';
+    document.getElementById('options').style.display = '';
+    document.getElementById('achievements').style.display = '';
+    document.getElementById('bottom-options').style.display = '';
+}
+
+function hideLoadingScreen() {
+    const loading = document.getElementById('loading-screen');
+    if (loading) {
+        loading.style.opacity = '0';
+        setTimeout(() => loading.style.display = 'none', 400);
+    }
+    document.querySelector('.game-container').style.display = '';
+}
+
+// 加载图片并返回Promise
+function preloadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new window.Image();
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = src;
+    });
+}
+
+// 初始化游戏 - 现在不需要加载JSON了
+function initGame() {
+    Promise.all([
+        preloadImage('images/icons/icon-v4.png'),
+        preloadImage('https://github.com/CheongSzesuen/OK-School-Life-Web/blob/main/images/welcome/mini/welcome-v4.png?raw=true')
+    ])
+    .then(() => {
+        // 数据已经内置，直接初始化游戏
+        const initData = apiStartGame();
+        updateUI(initData);
+        hideLoadingScreen();
+    })
+    .catch(error => {
+        console.error('Error loading images:', error);
+        // 即使图片加载失败，游戏也可以继续
+        const initData = apiStartGame();
+        updateUI(initData);
+        hideLoadingScreen();
+    });
+}
+
 // 初始化游戏
-window.onload = function() {
-    const startData = apiStartGame();
-    updateUI(startData);
-};
+window.onload = initGame;
