@@ -1,15 +1,5 @@
 {
   "metadata": {
-    "contributors": {
-      "ctb_HHZ": "StillAlive",
-      "ctb_wai": "WaiJade",
-      "adp_lag": "lagency",
-      "ctb_zhi": "智心逍遥",
-      "ctb_sky": "sky",
-      "ctb_tmt": "Tomato",
-      "ctb_yax": "YaXuan",
-      "ctb_guo": "GuoHao"
-    },
     "start_options": [
       "你在一个富裕家庭",
       "你在一个普通家庭",
@@ -21,7 +11,7 @@
       "group_1": [
         {
           "id": "event_1_1",
-          "question": "第一周开家长会，校长讲话时间超出预计时间一小时，导致放学时间延迟，你会？",
+          "question": ">>>第一周开家长会，校长讲话时间超出预计时间一小时，导致放学时间延迟，你会？",
           "choices": {
             "1": "继续听演讲",
             "2": "请假回家",
@@ -34,11 +24,11 @@
           },
           "end_game_choices": ["3"],
           "achievements": {},
-          "contributors": ["ctb_SA"]
+          "contributors": ["Still Alive"]
         },
         {
           "id": "event_1_2",
-          "question": "面对单休制，你开始了怎样的思考？",
+          "question": ">>>面对单休制，你开始了怎样的思考？",
           "choices": {
             "1": "符合无钱补课者的利益",
             "2": "不合理的制度",
@@ -51,11 +41,11 @@
           },
           "end_game_choices": [],
           "achievements": {},
-          "contributors": ["ctb_SA"]
+          "contributors": ["Still Alive"]
         },
         {
           "id": "event_1_3",
-          "question": "看到学校的电梯，你会怎么做？",
+          "question": ">>>看到学校的电梯，你会怎么做？",
           "choices": {
             "1": "乘坐电梯",
             "2": "走楼梯",
@@ -68,13 +58,13 @@
           },
           "end_game_choices": ["1"],
           "achievements": {},
-          "contributors": ["ctb_SA"]
+          "contributors": ["Still Alive"]
         }
       ],
       "group_2": [
         {
           "id": "event_2_1",
-          "question": "军训时你感到身体不适，你会？",
+          "question": ">>>军训时你感到身体不适，你会？",
           "choices": {
             "1": "烈日下硬撑着",
             "2": "向老师说明",
@@ -87,11 +77,11 @@
           },
           "end_game_choices": ["1"],
           "achievements": {},
-          "contributors": ["ctb_SA"]
+          "contributors": ["Still Alive"]
         },
         {
           "id": "event_2_2",
-          "question": "社团招新，你会？",
+          "question": ">>>社团招新，你会？",
           "choices": {
             "1": "加入社团",
             "2": "不加入社团",
@@ -104,11 +94,11 @@
           },
           "end_game_choices": [],
           "achievements": {},
-          "contributors": ["ctb_SA"]
+          "contributors": ["Still Alive"]
         },
         {
           "id": "event_2_3",
-          "question": "舍友睡觉呼噜声很大，你会？",
+          "question": ">>>舍友睡觉呼噜声很大，你会？",
           "choices": {
             "1": "忍耐",
             "2": "向老师投诉",
@@ -121,13 +111,13 @@
           },
           "end_game_choices": ["3"],
           "achievements": {},
-          "contributors": ["ctb_SA"]
+          "contributors": ["Still Alive"]
         }
       ],
       "group_3": [
         {
           "id": "event_3_1",
-          "question": "开学考试，你发现试题很难，你选择？",
+          "question": ">>>开学考试，你发现试题很难，你选择？",
           "choices": {
             "1": "大声呼救",
             "2": "硬着头皮做",
@@ -140,11 +130,11 @@
           },
           "end_game_choices": ["1"],
           "achievements": {},
-          "contributors": ["ctb_SA"]
+          "contributors": ["Still Alive"]
         },
         {
           "id": "event_3_2",
-          "question": "看到有同学乘坐黑色高级车，你会？",
+          "question": ">>>看到有同学乘坐黑色高级车，你会？",
           "choices": {
             "1": "巴结这位同学",
             "2": "去看ta的父母是何方神圣",
@@ -157,11 +147,11 @@
           },
           "end_game_choices": ["3"],
           "achievements": {},
-          "contributors": ["ctb_SA"]
+          "contributors": ["Still Alive"]
         },
         {
           "id": "event_3_3",
-          "question": "放学后时间很紧，你选择？",
+          "question": ">>>放学后时间很紧，你选择？",
           "choices": {
             "1": "先写作业",
             "2": "先洗澡",
@@ -174,14 +164,14 @@
           },
           "end_game_choices": [],
           "achievements": {},
-          "contributors": ["ctb_SA"]
+          "contributors": ["Still Alive"]
         }
       ]
     },
     "random_events": [
       {
         "id": "random_1",
-        "question": "你在学校的食堂吃饭，发现菜品很差，你会？",
+        "question": ">>>你在学校的食堂吃饭，发现菜品很差，你会？",
         "choices": {
           "1": "继续吃饭",
           "2": "投诉",
@@ -194,11 +184,11 @@
         },
         "end_game_choices": ["3"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_2",
-        "question": "你在学校的图书馆借书，发现没有你想要的书，你会？",
+        "question": ">>>你在学校的图书馆借书，发现没有你想要的书，你会？",
         "choices": {
           "1": "继续借书",
           "2": "去找老师",
@@ -211,11 +201,11 @@
         },
         "end_game_choices": ["3"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_3",
-        "question": "你在学校的操场上看到同学们打篮球，你会？",
+        "question": ">>>你在学校的操场上看到同学们打篮球，你会？",
         "choices": {
           "1": "加入这些人",
           "2": "拍照发朋友圈",
@@ -228,11 +218,11 @@
         },
         "end_game_choices": [],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_4",
-        "question": "你在学校的实验室里做实验，发现实验器材损坏，你会？",
+        "question": ">>>你在学校的实验室里做实验，发现实验器材损坏，你会？",
         "choices": {
           "1": "修理实验器材",
           "2": "不管",
@@ -245,11 +235,11 @@
         },
         "end_game_choices": ["2"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_5",
-        "question": "你在学校的宿舍里，发现室友总是打游戏，你会？",
+        "question": ">>>你在学校的宿舍里，发现室友总是打游戏，你会？",
         "choices": {
           "1": "向班主任举报",
           "2": "向年轻老师举报",
@@ -262,11 +252,11 @@
         },
         "end_game_choices": ["1"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_6",
-        "question": "你在学校的教室里，发现同学们在讨论考试作弊，你会？",
+        "question": ">>>你在学校的教室里，发现同学们在讨论考试作弊，你会？",
         "choices": {
           "1": "加入他们",
           "2": "拍照发朋友圈",
@@ -279,11 +269,11 @@
         },
         "end_game_choices": ["1"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_7",
-        "question": "考试：sin x = cos ____？",
+        "question": ">>>考试：sin x = cos ____？",
         "choices": {
           "1": "x + π",
           "2": "x - π/2",
@@ -296,11 +286,11 @@
         },
         "end_game_choices": ["1"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_8",
-        "question": "考试：sin 2x = ____？",
+        "question": ">>>考试：sin 2x = ____？",
         "choices": {
           "1": "2(sinx)(cosx)",
           "2": "π",
@@ -313,11 +303,11 @@
         },
         "end_game_choices": ["2"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_9",
-        "question": "考试：中国历史上的第一位皇帝是？",
+        "question": ">>>考试：中国历史上的第一位皇帝是？",
         "choices": {
           "1": "泰始皇",
           "2": "夏禹",
@@ -332,11 +322,11 @@
         "achievements": {
           "3": "视力5.0"
         },
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_10",
-        "question": "考试：tan x/2的周期是？",
+        "question": ">>>考试：tan x/2的周期是？",
         "choices": {
           "1": "x",
           "2": "π/2",
@@ -349,11 +339,11 @@
         },
         "end_game_choices": ["1"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_11",
-        "question": "你和同学对比国摇和欧美摇滚，你会选择？",
+        "question": ">>>你和同学对比国摇和欧美摇滚，你会选择？",
         "choices": {
           "1": "国摇好",
           "2": "欧美摇滚好",
@@ -366,11 +356,11 @@
         },
         "end_game_choices": [],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_12",
-        "question": "有同学组建“觉醒者联盟”，你选择？",
+        "question": ">>>有同学组建“觉醒者联盟”，你选择？",
         "choices": {
           "1": "当普通成员",
           "2": "当宣传部长",
@@ -383,11 +373,11 @@
         },
         "end_game_choices": ["2"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_13",
-        "question": "你在学校的社团中，发现社团活动不符合你的兴趣，你会？",
+        "question": ">>>你在学校的社团中，发现社团活动不符合你的兴趣，你会？",
         "choices": {
           "1": "继续待在社团",
           "2": "退社并不加入其他社团",
@@ -400,11 +390,11 @@
         },
         "end_game_choices": [],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_14",
-        "question": "班里有同学玩原神，你会？",
+        "question": ">>>班里有同学玩原神，你会？",
         "choices": {
           "1": "和他整天讨论",
           "2": "背后说ta是OP",
@@ -419,11 +409,11 @@
         "achievements": {
           "1": "原神启动"
         },
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_15",
-        "question": "班里有同学玩LOL，你会？",
+        "question": ">>>班里有同学玩LOL，你会？",
         "choices": {
           "1": "和他讨论喜欢的英雄",
           "2": "对他说不如王者荣耀",
@@ -438,11 +428,11 @@
         "achievements": {
           "3": "一心学习"
         },
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_16",
-        "question": "今天早自习突然检查仪容仪表，你的头发被老师点名批评“不合规范”，你会？",
+        "question": ">>>今天早自习突然检查仪容仪表，你的头发被老师点名批评“不合规范”，你会？",
         "choices": {
           "1": "当场认错，说以后注意",
           "2": "小声反驳，说这是个人风格",
@@ -457,11 +447,11 @@
         "achievements": {
           "2": "理科发型"
         },
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_17",
-        "question": "英语老师心血来潮临时宣布要测一张听写卷，你昨晚偏偏没背单词，你会？",
+        "question": ">>>英语老师心血来潮临时宣布要测一张听写卷，你昨晚偏偏没背单词，你会？",
         "choices": {
           "1": "硬着头皮上",
           "2": "装病逃课",
@@ -474,11 +464,11 @@
         },
         "end_game_choices": [],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_18",
-        "question": "学校食堂推出“健康套餐”，但卖相一般，面对它，你会？",
+        "question": ">>>学校食堂推出“健康套餐”，但卖相一般，面对它，你会？",
         "choices": {
           "1": "咬咬牙尝试一下，毕竟健康",
           "2": "去小卖部买泡面",
@@ -491,11 +481,11 @@
         },
         "end_game_choices": ["3"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_19",
-        "question": "你被班主任安排参加1500米长跑选拔，你内心抗拒但又怕被扣分，你会？",
+        "question": ">>>你被班主任安排参加1500米长跑选拔，你内心抗拒但又怕被扣分，你会？",
         "choices": {
           "1": "勉强上阵，全力跑完",
           "2": "故意跑慢，装作不擅长",
@@ -508,11 +498,11 @@
         },
         "end_game_choices": ["1"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_20",
-        "question": "老师打开PPT，念稿40分钟，语速极慢，字还特别小。你会？",
+        "question": ">>>老师打开PPT，念稿40分钟，语速极慢，字还特别小。你会？",
         "choices": {
           "1": "努力集中精神，坚持到底",
           "2": "大声呵斥老师",
@@ -525,11 +515,11 @@
         },
         "end_game_choices": ["2"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_21",
-        "question": "放学时突然下起大雨，你没带伞，你会？",
+        "question": ">>>放学时突然下起大雨，你没带伞，你会？",
         "choices": {
           "1": "借同学的伞，送一段路再跑回家",
           "2": "淋雨冲回家，冲凉省了",
@@ -544,11 +534,11 @@
         "achievements": {
           "3": "成长"
         },
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_22",
-        "question": "你这周要负责扫地，但今天作业太多，你想偷个懒。你会？",
+        "question": ">>>你这周要负责扫地，但今天作业太多，你想偷个懒。你会？",
         "choices": {
           "1": "找朋友帮忙，周末请ta喝饮料",
           "2": "装作忘记，等老师点名再说",
@@ -561,11 +551,11 @@
         },
         "end_game_choices": ["3"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_23",
-        "question": "地理课，老师问：同学们，你们猜我是我们老李家第几代教书匠？",
+        "question": ">>>地理课，老师问：同学们，你们猜我是我们老李家第几代教书匠？",
         "choices": {
           "1": "你是老李家第二代教书匠",
           "2": "你是老李家第三代教书匠",
@@ -578,11 +568,11 @@
         },
         "end_game_choices": [],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_24",
-        "question": "遇到老师，你选择低头。老师走近问你为什么不给她打招呼，你会？",
+        "question": ">>>遇到老师，你选择低头。老师走近问你为什么不给她打招呼，你会？",
         "choices": {
           "1": "低头",
           "2": "微笑",
@@ -595,11 +585,11 @@
         },
         "end_game_choices": ["3"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_25",
-        "question": "校园传奇浴室，看到一群烟哥在吸烟，你会？",
+        "question": ">>>校园传奇浴室，看到一群烟哥在吸烟，你会？",
         "choices": {
           "1": "私下向校长举报",
           "2": "直接开骂",
@@ -614,11 +604,11 @@
         },
         "end_game_choices": ["2"],
         "achievements": {},
-        "contributors": ["ctb_wai"]
+        "contributors": ["WaiJade"]
       },
       {
         "id": "random_26",
-        "question": "考试的时候，你有点在意的女生/男生坐在你旁边，你会？",
+        "question": ">>>考试的时候，你有点在意的女生/男生坐在你旁边，你会？",
         "choices": {
           "1": "毫不在意，纯西格玛",
           "2": "看看ta做题做到哪了",
@@ -635,11 +625,11 @@
         "achievements": {
           "1": "西格玛人"
         },
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_27",
-        "question": "听到同学在聊网络爽文，你会？",
+        "question": ">>>听到同学在聊网络爽文，你会？",
         "choices": {
           "1": "觉得这东西很没营养",
           "2": "大声说“网文都是垃圾！”",
@@ -652,11 +642,11 @@
         },
         "end_game_choices": ["2"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_28",
-        "question": "星期一就想放假，你会？",
+        "question": ">>>星期一就想放假，你会？",
         "choices": {
           "1": "大声喊“我想放假！”",
           "2": "认为只要认真学习，一周很快就会过去",
@@ -669,11 +659,11 @@
         },
         "end_game_choices": [],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_29",
-        "question": "班主任说从你家长那里打听来你天天玩电脑，你会？",
+        "question": ">>>班主任说从你家长那里打听来你天天玩电脑，你会？",
         "choices": {
           "1": "说“我在学编程”",
           "2": "说“我没有玩电脑”",
@@ -688,11 +678,11 @@
         "achievements": {
           "1": "开发者の认可"
         },
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_30",
-        "question": "在学校看见穿着自己喜欢的专辑封面衣服的人，你会？",
+        "question": ">>>在学校看见穿着自己喜欢的专辑封面衣服的人，你会？",
         "choices": {
           "1": "对ta说终于找到同好了",
           "2": "说出这个乐队的名字",
@@ -705,11 +695,11 @@
         },
         "end_game_choices": [],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_31",
-        "question": "在宿舍流鼻血，你会？",
+        "question": ">>>在宿舍流鼻血，你会？",
         "choices": {
           "1": "只是用纸堵住，相信会好",
           "2": "叫救护车",
@@ -732,11 +722,11 @@
         },
         "end_game_choices": [],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_32",
-        "question": "你刚开学，在食堂看到了某社社长，你会？",
+        "question": ">>>你刚开学，在食堂看到了某社社长，你会？",
         "choices": {
           "1": "无视",
           "2": "上前打招呼",
@@ -751,11 +741,11 @@
         "achievements": {
           "2": "正义插队者"
         },
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_33",
-        "question": "隔壁班女生给你表白，你选择？",
+        "question": ">>>隔壁班女生给你表白，你选择？",
         "choices": {
           "1": "欣然接受",
           "2": "告诉她你是gay",
@@ -770,11 +760,11 @@
         "achievements": {
           "2": "成都boy！"
         },
-        "contributors": ["adp_lag"]
+        "contributors": ["lagency"]
       },
       {
         "id": "random_34",
-        "question": "班里大选，你票数不够，你选择：",
+        "question": ">>>班里大选，你票数不够，你选择：",
         "choices": {
           "1": "征战男生宿舍",
           "2": "坐视不管，相信姜太公钓鱼，愿者上钩",
@@ -789,11 +779,11 @@
         "achievements": {
           "1": "不屈的金枪客"
         },
-        "contributors": ["ctb_zhi"]
+        "contributors": ["智心逍遥"]
       },
       {
         "id": "random_35",
-        "question": "你期中考试得了年级前10，你选择：",
+        "question": ">>>你期中考试得了年级前10，你选择：",
         "choices": {
           "1": "在领奖台上发表“想成为年级前10吗？Just do it！你也可以”的感言",
           "2": "在领奖台上对自己喜欢的女生表白",
@@ -809,11 +799,11 @@
           "1": "孤勇者",
           "3": "神里绫华の狗"
         },
-        "contributors": ["adp_lag"]
+        "contributors": ["lagency"]
       },
       {
         "id": "random_36",
-        "question": "校门口的校霸伙同小混混勒索你，你选择：",
+        "question": ">>>校门口的校霸伙同小混混勒索你，你选择：",
         "choices": {
           "1": "老实交钱",
           "2": "事后报警",
@@ -831,11 +821,11 @@
           "1": "窝囊组加分",
           "3": "哎！"
         },
-        "contributors": ["ctb_sky"]
+        "contributors": ["sky"]
       },
       {
         "id": "random_37",
-        "question": "语文课上，老师点人背诵来决定作业，点到你，选择：",
+        "question": ">>>语文课上，老师点人背诵来决定作业，点到你，选择：",
         "choices": {
           "1": "沉着应对",
           "2": "靠同学指点",
@@ -864,11 +854,11 @@
         "achievements": {
           "1": "过目不忘"
         },
-        "contributors": ["ctb_zhi"]
+        "contributors": ["智心逍遥"]
       },
       {
         "id": "random_38",
-        "question": "考试：“Unit Three”发音最像？",
+        "question": ">>>考试：“Unit Three”发音最像？",
         "choices": {
           "1": "油滴水",
           "2": "油腻水",
@@ -883,11 +873,11 @@
         "achievements": {
           "2": "不哑巴英语"
         },
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_39",
-        "question": "考试：“The future belongs to those ___ change it.”",
+        "question": ">>>考试：“The future belongs to those ___ change it.”",
         "choices": {
           "1": "Donald Trump",
           "2": "whose",
@@ -900,11 +890,11 @@
         },
         "end_game_choices": ["1"],
         "achievements": {},
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_40",
-        "question": "数学建模活动，你与组员发生冲突，你选择？",
+        "question": ">>>数学建模活动，你与组员发生冲突，你选择？",
         "choices": {
           "1": "原谅他们",
           "2": "报起怒喷",
@@ -919,11 +909,11 @@
         "achievements": {
           "1": "丞相：有容乃大"
         },
-        "contributors": ["ctb_zhi"]
+        "contributors": ["智心逍遥"]
       },
       {
         "id": "random_41",
-        "question": "英语自习课上，开发者感到很无奈，你选择：",
+        "question": ">>>英语自习课上，开发者感到很无奈，你选择：",
         "choices": {
           "1": "鼓励开发者",
           "2": "忽视"
@@ -936,11 +926,11 @@
         "achievements": {
           "1": "开发者の感谢"
         },
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_42",
-        "question": "体育课活动时间，望着天空，你会想？",
+        "question": ">>>体育课活动时间，望着天空，你会想？",
         "choices": {
           "1": "世上只有我一个真人，其他都是NPC",
           "2": "生活虐我千百遍，我待生活如初恋",
@@ -975,11 +965,11 @@
           "8": "网瘾",
           "9": "homesick"
         },
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_43",
-        "question": "现在是四月，天气很热，但是没有中央空调，你会？",
+        "question": ">>>现在是四月，天气很热，但是没有中央空调，你会？",
         "choices": {
           "1": "忍耐！willpower！",
           "2": "每次进班都说一句，“怎么这↑么↓热→？！”",
@@ -995,11 +985,11 @@
           "1": "忍者神龟",
           "2": "乐子人"
         },
-        "contributors": ["ctb_wai"]
+        "contributors": ["WaiJade"]
       },
       {
         "id": "random_44",
-        "question": "化学老师上课讲错了一道题，你会说？",
+        "question": ">>>化学老师上课讲错了一道题，你会说？",
         "choices": {
           "1": "错了，又错了",
           "2": "注意细节",
@@ -1014,11 +1004,11 @@
         "achievements": {
           "2": "满满的细节"
         },
-        "contributors": ["ctb_SA"]
+        "contributors": ["Still Alive"]
       },
       {
         "id": "random_45",
-        "question": "你是一个走读生，早上你要买早饭，你决定？",
+        "question": ">>>你是一个走读生，早上你要买早饭，你决定？",
         "choices": {
           "1": "走西门，吃食堂",
           "2": "走北门，吃饭团",
@@ -1033,11 +1023,11 @@
         "achievements": {
           "1": "内个"
         },
-        "contributors": ["ctb_tmt"]
+        "contributors": ["Tomato"]
       },
       {
         "id": "random_46",
-        "question": "5月中旬，汗忠天气炎热，但学校的中央空调迟迟未开，你决定？",
+        "question": ">>>5月中旬，汗忠天气炎热，但学校的中央空调迟迟未开，你决定？",
         "choices": {
           "1": "埋头“做事情”，并将教室门关紧，防止通风，预防病毒交叉感染",
           "2": "怒斥校长",
@@ -1051,12 +1041,12 @@
         "achievements": {
           "3": "《绿皮书》忠实粉丝"
         },
-        "contributors": ["ctb_tmt"],
+        "contributors": ["Tomato"],
         "end_game_choices": ["1"]
       },
       {
         "id": "random_47",
-        "question": "你获得了Sweet的讲课PPT的最后一页的“通关小曲”",
+        "question": ">>>你获得了Sweet的讲课PPT的最后一页的“通关小曲”",
         "choices": {
           "1": "放来听听",
           "2": "插入到数学老师PPT第一页",
@@ -1071,11 +1061,11 @@
         "achievements": {
           "2": "孤胆英雄"
         },
-        "contributors": ["ctb_tmt"]
+        "contributors": ["Tomato"]
       },
       {
         "id": "random_48",
-        "question": "你是高一会考学生，你在本校考试，你在高二教学楼考试，你想上厕所你决定？",
+        "question": ">>>你是高一会考学生，你在本校考试，你在高二教学楼考试，你想上厕所你决定？",
         "choices": {
           "1": "边走边认真复习考试科目",
           "2": "探索一下高二教学楼",
@@ -1100,11 +1090,11 @@
           "1": "校园流言中的“有个人”",
           "2": "华生"
         },
-        "contributors": ["ctb_wai"]
+        "contributors": ["WaiJade"]
       },
       {
         "id": "random_49",
-        "question": "你与后桌在数学课前打赌，你打赌",
+        "question": ">>>你与后桌在数学课前打赌，你打赌",
         "choices": {
           "1": "老师左手拿尺子",
           "2": "老师右手拿尺子",
@@ -1116,11 +1106,11 @@
           "3": "正↗确↗！（毛毛音）"
         },
         "end_game_choices": [],
-        "contributors": ["ctb_yax"]
+        "contributors": ["YaXuan"]
       },
       {
         "id": "random_50",
-        "question": "课堂提问：《林教头风雪ocean庙》中的雪是谁决定的？",
+        "question": ">>>课堂提问：《林教头风雪ocean庙》中的雪是谁决定的？",
         "choices": {
           "1": "张万森",
           "2": "施耐庵",
@@ -1134,11 +1124,11 @@
           "4": "这个选项纯粹是二进制随机排列，和开发者无关。"
         },
         "end_game_choices": [],
-        "contributors": ["ctb_yax"]
+        "contributors": ["YaXuan"]
       },
       {
         "id": "random_51",
-        "question": "端午节的三天假期变成了两天，而作业还是按三天布置，你决定：",
+        "question": ">>>端午节的三天假期变成了两天，而作业还是按三天布置，你决定：",
         "choices": {
           "1": "不写了",
           "2": "质问学校领导",
@@ -1152,11 +1142,26 @@
           "4": "你周末玩的很不爽。心情不好。"
         },
         "end_game_choices": [],
-        "contributors": ["ctb_wai"]
+        "contributors": ["WaiJade"]
+      },
+      {
+        "id": "random_52",
+        "question": ">>>你的化学老师请假了，你希望哪个老师来：",
+        "choices": {
+          "1": "MC",
+          "2": "陈晓俊",
+          "3": "毛毛"
+        },
+        "results": {
+          "1": "你喜欢这个男人的化学课，你决得这才是教师，并向他看齐。",
+          "2": "你三天没下过课，",
+          "3": "毛毛一言不发只是一味地画图然后让你出答案，你有点恼火，但还能接受。并且你学会了“错↗↘了↗→（毛毛音）”"
+        },
+        "contributors": ["WaiJade", "GuoHao"]
       },
       {
         "id": "random_53",
-        "question": "学校准备分科，你选择：",
+        "question": ">>>学校准备分科，你选择：",
         "choices": {
           "1": "政史地",
           "2": "物化政，物化地",
@@ -1173,7 +1178,29 @@
         "achievements": {
           "4": "卷↗↘狗↗"
         },
-        "contributors": ["ctb_tmt"]
+        "contributors": ["Tomato"]
+      },
+      {
+        "id": "random_54",
+        "question": ">>>周一活动课，你很想玩电脑，你选择：",
+        "choices": {
+          "1": "还等什么？马上玩！",
+          "2": "先写完作业再玩",
+          "3": "把游戏放到桌面上让同学玩"
+        },
+        "results": {
+          "1": [
+            {"text": "班主任提前回来，看着你玩电脑，并且夸你编程水平出色。","prob": 0.5},
+            {"text": "你在电脑上一通操作，你在意的人以为你很装","prob": 0.5}
+          ],
+          "2": "你选择了无视。好像什么也没有发生。",
+          "3": "班主任突然进来，对玩游戏的同学进行批评教育，并且查出的游戏了始作俑者。"
+        },
+        "end_game_choices": [],
+        "achievements": {
+          "3": "电脑高手"
+        },
+        "contributors": ["Still Alive"]
       }
     ]
   }
