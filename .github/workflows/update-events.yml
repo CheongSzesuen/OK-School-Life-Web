@@ -16,13 +16,15 @@ jobs:
         run: |
           curl -fSL "https://cdn.jsdelivr.net/gh/still-alive-hhz/OK-School-Life@main/assets/data/events.json" -o data/events.json
 
+      - name: Configure Git for commit
+        run: |
+          git config user.name "Event Synchronization Bot"
+
       - name: Commit and push changes
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
           git add data/events.json
           if ! git diff-index --quiet HEAD; then
-            git commit -m "Update events.json"
+            git commit -m "自动更新 events.json 文件"
             git push
           else
             echo "No changes detected."
