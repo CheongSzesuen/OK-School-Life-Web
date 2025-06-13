@@ -1,5 +1,5 @@
 // 游戏数据 URL（用于加载 JSON 文件）
-const GAME_DATA_URL = 'https://cdn.jsdelivr.net/gh/still-alive-hhz/OK-School-Life@main/assets/data/events.json';
+const GAME_DATA_URL = 'https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web/data/events.json?t=' + Date.now();
 
 const gameState = {
     currentApi: 'choose_start',
