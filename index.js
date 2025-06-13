@@ -1,5 +1,5 @@
 // 游戏数据URL
-const GAME_DATA_URL = 'https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web/data/events.json';
+const GAME_DATA_URL = 'https://cdn.jsdelivr.net/gh/still-alive-hhz/OK-School-Life@main/assets/data/events.json';
 
 const gameState = {
     currentApi: '/api/choose_start',
@@ -20,7 +20,7 @@ const gameState = {
 
 // 辅助函数
 function getContributorStr(event) {
-    return event.contributors?.length > 0 ? `（由${event.contributors.join("、")}贡献）` : "";
+    return event.contributors && event.contributors.length > 0 ? `（贡献者：${event.contributors.join("、")}）` : "";
 }
 
 function pickResult(resultValue) {
@@ -73,64 +73,42 @@ function apiStartGame() {
     };
 }
 
+// 修改后的 apiChooseStart：根据用户选择的家庭类型（1-富裕、2-普通、3-贫穷）
 function apiChooseStart(choice) {
     if (choice === '5') {
         return { message: '感谢游玩，期待下次再见！', game_over: true };
     }
 
+    // 重置游戏状态，并记录所选家庭类型
     gameState.userState = {
-        school: null,
+        familyIndex: choice, // 存储选择（"1", "2" 或 "3"）
         eventIdx: 0,
         stage: "fixed",
         randomUsed: new Set(),
         lastRandomIdx: null
     };
 
-    const startEvent = weightedRandom(getEventList(), [0.2, 0.5, 0.3]);
+    const familyOption = getEventList()[parseInt(choice) - 1]; // 从 metadata.start_options 中选择
+    const groupKey = `group_${choice}`; // 假定新 events 中固定事件的组key为 group_1, group_2, group_3
+    const eventList = getGroupEvents(groupKey);
+    if (!eventList.length) return { message: '未知事件', game_over: true };
+
+    const firstEvent = eventList[0];
     return {
-        message: `${startEvent}。\n你中考考得很好，现在可以选择学校。`,
-        options: [
-            { key: '1', text: '羊县中学' },
-            { key: '2', text: '闪西省汗忠中学' },
-            { key: '3', text: '汗忠市龙港高级中学' }
-        ],
-        start_event: startEvent,
-        next_event: 'choose_school'
+        message: `${familyOption}。\n${firstEvent.question}${getContributorStr(firstEvent)}`,
+        options: Object.entries(firstEvent.choices).map(([key, text]) => ({ key, text })),
+        next_event: 'fixed_event'
     };
 }
 
-function apiChooseSchool(school) {
-    gameState.userState = {
-        school,
-        eventIdx: 0,
-        stage: "fixed",
-        randomUsed: new Set(),
-        lastRandomIdx: null
-    };
-
-    const groupKey = `group_${school}`;
+// 新增加固定事件处理函数（原 apiChooseSchool 改造）
+function apiFixedEvent(choice) {
+    const familyIndex = gameState.userState.familyIndex;
+    const groupKey = `group_${familyIndex}`;
     const eventList = getGroupEvents(groupKey);
-    if (!eventList.length) return { message: '未知学校', game_over: true };
+    if (!eventList.length) return { message: '未知事件', game_over: true };
 
-    const event = eventList[0];
-    if (typeof event !== 'object') {
-        return { message: event, options: [], next_event: 'school_event' };
-    }
-
-    return {
-        message: event.question + getContributorStr(event),
-        options: Object.entries(event.choices).map(([key, text]) => ({ key, text })),
-        next_event: 'school_event'
-    };
-}
-
-function apiSchoolEvent(choice) {
-    const { school, eventIdx } = gameState.userState;
-    const groupKey = `group_${school}`;
-    const eventList = getGroupEvents(groupKey);
-    if (!eventList.length) return { message: '未知学校', game_over: true };
-
-    const event = eventList[eventIdx];
+    const event = eventList[gameState.userState.eventIdx];
     if (typeof event !== 'object') {
         gameState.userState.eventIdx += 1;
         return handleEventTransition(event, "");
@@ -138,7 +116,6 @@ function apiSchoolEvent(choice) {
 
     const { text, endGame } = pickResult(event.results[choice]);
     const triggeredAchievements = [];
-    
     if (event.achievements?.[choice]) {
         const achievement = event.achievements[choice];
         triggeredAchievements.push(achievement);
@@ -146,7 +123,7 @@ function apiSchoolEvent(choice) {
             gameState.achievements.push(achievement);
         }
     }
-
+    
     if (endGame || event.end_game_choices?.includes(choice)) {
         return {
             message: `${text}\n你失败了，游戏结束！`,
@@ -154,7 +131,7 @@ function apiSchoolEvent(choice) {
             achievements: triggeredAchievements
         };
     }
-
+    
     gameState.userState.eventIdx += 1;
     gameState.score += 1;
     return handleEventTransition(eventList[gameState.userState.eventIdx], text, triggeredAchievements);
@@ -367,19 +344,27 @@ function toggleCoverImage() {
 
 function makeChoice(choice, startEvent = null) {
     let data;
-    
     switch (gameState.currentApi) {
-        case '/api/choose_start': data = apiChooseStart(choice); break;
-        case '/api/choose_school': data = apiChooseSchool(choice); break;
-        case '/api/school_event': data = apiSchoolEvent(choice); break;
-        case '/api/random_event': data = apiRandomEvent(choice); break;
-        default: data = apiStartGame();
+        case '/api/choose_start': 
+            data = apiChooseStart(choice); 
+            break;
+        case '/api/fixed_event': 
+            data = apiFixedEvent(choice); 
+            break;
+        case '/api/school_event': 
+            data = apiSchoolEvent(choice); 
+            break;
+        case '/api/random_event': 
+            data = apiRandomEvent(choice); 
+            break;
+        default: 
+            data = apiStartGame();
     }
-    
     updateUI(data);
     updateCurrentApi(data);
 }
 
+// 修改 updateCurrentApi，保持原逻辑不变
 function updateCurrentApi(data) {
     if (data.game_over) {
         gameState.currentApi = '/api/choose_start';
