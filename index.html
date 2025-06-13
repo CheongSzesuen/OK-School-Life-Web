@@ -39,4 +39,13 @@
     <script src="index.js"></script>
     <script defer src="/_vercel/insights/script.js"></script>
 </body>
+<script>
+window.addEventListener('error', (e) => {
+  if (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK') {
+    const url = new URL(e.target.src || e.target.href);
+    url.host = 'okschoollife.pages.dev'; 
+    e.target.src = url.href;
+  }
+}, true);
+</script>
 </html>
