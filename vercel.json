@@ -1,0 +1,49 @@
+{
+  "$schema": "https://openapi.vercel.com/vercel.json",
+  "version": 2,
+  "regions": ["hkg1", "icn1", "sin1"],
+  "cacheControl": {
+    "/_next/static/(.*)": {
+      "cdn": "public, max-age=31536000, immutable",
+      "browser": "public, max-age=31536000, immutable"
+    },
+    "/(.*\\.(jpg|png|webp|avif|woff2|css|js))": {
+      "cdn": "public, max-age=86400",
+      "browser": "public, max-age=86400"
+    },
+    "/api/(.*)": {
+      "cdn": "no-store",
+      "browser": "no-cache"
+    }
+  },
+  "routes": [
+    {
+      "src": "/",
+      "headers": {
+        "X-Edge-Region": "hkg1",
+        "X-CDN-Fallback": "icn1"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "continue": true,
+      "headers": {
+        "X-Cache-Key": "$uri",
+        "X-Origin-Region": "auto"
+      }
+    }
+  ],
+  "edgeFunctions": {
+    "middleware": {
+      "path": "middleware.js",
+      "regions": ["hkg1"]
+    }
+  },
+  "experimental": {
+    "isr": true,
+    "prefetch": {
+      "enabled": true,
+      "cacheKey": "prefetch-$uri"
+    }
+  }
+}
