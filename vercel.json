@@ -2,48 +2,33 @@
   "$schema": "https://openapi.vercel.com/vercel.json",
   "version": 2,
   "regions": ["hkg1", "icn1", "sin1"],
-  "cacheControl": {
-    "/_next/static/(.*)": {
-      "cdn": "public, max-age=31536000, immutable",
-      "browser": "public, max-age=31536000, immutable"
-    },
-    "/(.*\\.(jpg|png|webp|avif|woff2|css|js))": {
-      "cdn": "public, max-age=86400",
-      "browser": "public, max-age=86400"
-    },
-    "/api/(.*)": {
-      "cdn": "no-store",
-      "browser": "no-cache"
-    }
-  },
   "routes": [
     {
-      "src": "/",
+      "src": "/_next/static/(.*)",
       "headers": {
-        "X-Edge-Region": "hkg1",
-        "X-CDN-Fallback": "icn1"
+        "cache-control": "public, max-age=31536000, immutable"
       }
     },
     {
-      "src": "/(.*)",
-      "continue": true,
+      "src": "/(.*\\.(jpg|png|webp|avif|woff2|css|js))",
       "headers": {
-        "X-Cache-Key": "$uri",
-        "X-Origin-Region": "auto"
+        "cache-control": "public, max-age=86400"
+      }
+    },
+    {
+      "src": "/api/(.*)",
+      "headers": {
+        "cache-control": "no-store"
       }
     }
   ],
-  "edgeFunctions": {
-    "middleware": {
-      "path": "middleware.js",
-      "regions": ["hkg1"]
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "x-edge-region", "value": "hkg1" },
+        { "key": "x-cdn-fallback", "value": "icn1" }
+      ]
     }
-  },
-  "experimental": {
-    "isr": true,
-    "prefetch": {
-      "enabled": true,
-      "cacheKey": "prefetch-$uri"
-    }
-  }
+  ]
 }
