@@ -2,19 +2,32 @@
   "version": 2,
   "builds": [
     {
-      "src": "*.html",
+      "src": "./index.html", 
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.{css,js}", 
+      "use": "@vercel/static"
+    },
+    {
+      "src": "images/**/*", 
+      "use": "@vercel/static"
+    },
+    {
+      "src": "data/**/*",    
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/(.*\\.(ico|png|jpe?g|gif|svg|css|js|woff2?))$",
+      "src": "/(.*\\.(ico|png|jpe?g|gif|svg|css|js|woff2?|json))$",
       "headers": {
         "Cache-Control": "public, max-age=31536000, immutable"
-      }
+      },
+      "dest": "/$1"
     },
     {
-      "src": "/.*",
+      "src": "/(.*)",
       "dest": "/index.html"
     }
   ],
@@ -25,12 +38,7 @@
         {
           "key": "Strict-Transport-Security",
           "value": "max-age=63072000; includeSubDomains; preload"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
+        },
         {
           "key": "X-Frame-Options",
           "value": "SAMEORIGIN"
@@ -50,11 +58,7 @@
       ]
     }
   ],
-  "regions": ["hkg1"], 
-  "rewrites": [
-    {
-      "source": "/cdn/(.*)",
-      "destination": "https://unpkg.com/$1"
-    }
-  ]
+  "regions": ["hkg1"],  
+  "cleanUrls": true,    
+  "trailingSlash": false 
 }
