@@ -14,7 +14,7 @@ jobs:
 
       - name: Download events.json file
         run: |
-          curl -fSL "https://cdn.jsdelivr.net/gh/still-alive-hhz/OK-School-Life@main/assets/data/events.json" -o data/events.json
+          curl -fSL "https://raw.githubusercontent.com/still-alive-hhz/OK-School-Life/refs/heads/main/assets/data/events.json" -o data/events.json
 
       - name: Configure Git for commit
         run: |
