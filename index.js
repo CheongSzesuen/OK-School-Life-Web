@@ -1,4 +1,3 @@
-// 游戏数据 URL（用于加载 JSON 文件）
 const GAME_DATA_URL = 'data/events.json';
 
 const gameState = {
@@ -7,7 +6,7 @@ const gameState = {
     allAchievements: new Set(),
     userState: {
         school: null,
-        familyIndex: null, // 保存初始选择（"1", "2" 或 "3"）
+        familyIndex: null,
         eventIdx: 0,
         stage: "fixed",
         randomUsed: new Set(),
@@ -19,20 +18,9 @@ const gameState = {
     version: "v0.4.0"
 };
 
-// 缓存常用 DOM 元素
-const resultDiv = document.getElementById('result');
-const messageDiv = document.getElementById('message');
-const optionsDiv = document.getElementById('options');
-const bottomOptionsDiv = document.getElementById('bottom-options');
-const achievementsDiv = document.getElementById('achievements');
-const achievementsListDiv = document.getElementById('achievements-list');
-const coverImg = document.getElementById('cover-img');
-
-// 辅助函数：贡献者显示
-const getContributorStr = event => 
+const getContributorStr = event =>
     event.contributors && event.contributors.length ? `（贡献者：${event.contributors.join("、")}）` : "";
 
-// 辅助函数：返回事件结果（支持概率、数组和字符串格式）
 function pickResult(resultValue) {
     if (Array.isArray(resultValue)) {
         const probs = resultValue.map(item => item.prob || 1 / resultValue.length);
@@ -52,14 +40,10 @@ function weightedRandom(items, weights) {
     return items[items.length - 1];
 }
 
-// 根据 JSON 数据获取各类事件数据
 const getEventList = () => gameState.eventData?.metadata?.start_options || [];
 const getGroupEvents = groupKey => gameState.eventData?.events?.fixed_events?.[groupKey] || [];
 const getRandomEvents = () => gameState.eventData?.events?.random_events || [];
 
-// ----- 逻辑接口函数：纯 JS 实现，并直接返回数据对象 -----
-
-// 开始游戏：返回欢迎消息和主菜单
 function startGame() {
     return {
         message: `欢迎来到OK School Life beta ${gameState.version}！\n你将经历不同的事件和选择，看看你的学校生活会如何发展。`,
@@ -73,7 +57,6 @@ function startGame() {
     };
 }
 
-// 用户选择初始家庭类型
 function chooseStart(choice) {
     if (choice === '5') {
         return { message: '感谢游玩，期待下次再见！', game_over: true };
@@ -98,7 +81,6 @@ function chooseStart(choice) {
     };
 }
 
-// 处理固定事件选择
 function fixedEvent(choice) {
     const groupKey = `group_${gameState.userState.familyIndex}`;
     const events = getGroupEvents(groupKey);
@@ -121,18 +103,17 @@ function fixedEvent(choice) {
     gameState.score += 1;
     if (gameState.userState.eventIdx < events.length) {
         const nextEvent = events[gameState.userState.eventIdx];
-        return { 
-            message: `${res.text}\n${nextEvent.question}${getContributorStr(nextEvent)}`, 
-            options: Object.entries(nextEvent.choices).map(([key, text]) => ({ key, text })), 
+        return {
+            message: `${res.text}\n${nextEvent.question}${getContributorStr(nextEvent)}`,
+            options: Object.entries(nextEvent.choices).map(([key, text]) => ({ key, text })),
             next_event: 'fixed_event',
-            achievements: triggeredAchievements 
+            achievements: triggeredAchievements
         };
-    } 
+    }
     gameState.userState.stage = "random";
     return newRandomEvent(res.text, triggeredAchievements);
 }
 
-// 处理随机事件选择
 function randomEvent(choice) {
     const randomEvents = getRandomEvents();
     const lastIdx = gameState.userState.lastRandomIdx;
@@ -156,7 +137,6 @@ function randomEvent(choice) {
     return newRandomEvent(res.text, triggeredAchievements);
 }
 
-// 获取新的随机事件，并拼接上上一次的结果
 function newRandomEvent(prevResult = "", triggeredAchievements = []) {
     const randomEvents = getRandomEvents();
     const unused = [...Array(randomEvents.length).keys()].filter(i => !gameState.userState.randomUsed.has(i));
@@ -170,8 +150,7 @@ function newRandomEvent(prevResult = "", triggeredAchievements = []) {
     const idx = unused[Math.floor(Math.random() * unused.length)];
     gameState.userState.lastRandomIdx = idx;
     const event = randomEvents[idx];
-    const msg = prevResult ? `${prevResult}\n${event.question}${getContributorStr(event)}` 
-                            : `${event.question}${getContributorStr(event)}`;
+    const msg = prevResult ? `${prevResult}\n${event.question}${getContributorStr(event)}` : `${event.question}${getContributorStr(event)}`;
     return {
         message: msg,
         options: Object.entries(event.choices).map(([key, text]) => ({ key, text })),
@@ -180,96 +159,91 @@ function newRandomEvent(prevResult = "", triggeredAchievements = []) {
     };
 }
 
-// 获取成就与得分
 const getAchievements = () => ({ score: gameState.score, achievements: gameState.achievements });
-
-// 清除数据
 const clearData = () => {
     gameState.achievements = [];
     gameState.score = 0;
     return { message: '数据已清除！' };
 };
 
-// ----- 以下为 UI 相关代码 -----
+function updateUI(data) {
+    let questionText = data.message || '';
+    let lines = questionText.split('\n');
+    let resultText = '';
+    let nextQuestion = '';
 
-const splitMessage = message => {
-    if (!message?.includes('\n')) return [message, ''];
-    const idx = message.indexOf('\n');
-    let resultText = message.slice(0, idx).trim();
-    let nextQuestion = message.slice(idx + 1).trim();
-    if (nextQuestion && !nextQuestion.startsWith('>>>')) {
-        const idx2 = nextQuestion.indexOf('\n');
-        if (idx2 !== -1) {
-            resultText += '\n' + nextQuestion.slice(0, idx2).trim();
-            nextQuestion = nextQuestion.slice(idx2 + 1).trim();
-        } else {
-            resultText += '\n' + nextQuestion;
-            nextQuestion = '';
-        }
+    if (lines.length > 1) {
+        resultText = lines[0].trim();
+        nextQuestion = lines.slice(1).join('\n').trim();
+    } else {
+        resultText = '';
+        nextQuestion = questionText.trim();
     }
-    return [resultText, nextQuestion];
-};
 
-const updateUI = data => {
-    const [resultText, nextQuestion] = splitMessage(data.message);
-    if (resultText) gameState.lastResult = resultText;
-    resultDiv.textContent = gameState.lastResult;
-    messageDiv.textContent = nextQuestion;
-    updateOptions(data);
-    updateAchievements(data);
-    toggleCoverImage();
-};
+    document.getElementById('result').textContent = resultText;
+    document.getElementById('message').textContent = nextQuestion;
 
-const updateOptions = data => {
+    const optionsDiv = document.getElementById('options');
+    const bottomOptionsDiv = document.getElementById('bottom-options');
     optionsDiv.innerHTML = '';
     bottomOptionsDiv.innerHTML = '';
-    if (!data.options) return;
-    const { options, game_over, start_event } = data;
-    const bottomBtns = [];
-    options.forEach(option => {
-        if (['关于', '退出', '查看成就', '清除数据'].includes(option.text)) {
-            bottomBtns.push(option);
-        } else {
-            const btn = createButton(option, start_event);
-            btn.className = option.text === '开始游戏' ? 'start-btn' : '';
-            optionsDiv.appendChild(btn);
-        }
-    });
-    bottomBtns.forEach(option => {
-        const btn = createButton(option, start_event);
-        btn.className = 'half-btn';
-        bottomOptionsDiv.appendChild(btn);
-    });
+
+    if (data.options) {
+        const bottomBtns = [];
+        data.options.forEach(optionObj => {
+            if (
+                optionObj.text === '关于' ||
+                optionObj.text === '退出' ||
+                optionObj.text === '查看成就' ||
+                optionObj.text === '清除数据'
+            ) {
+                bottomBtns.push(optionObj);
+            } else {
+                const button = document.createElement('button');
+                button.textContent = optionObj.text;
+                if (optionObj.text === '开始游戏') button.className = 'start-btn';
+                button.onclick = () => makeChoiceHandler(optionObj.key);
+                optionsDiv.appendChild(button);
+            }
+        });
+        bottomBtns.forEach(optionObj => {
+            const button = document.createElement('button');
+            button.textContent = optionObj.text;
+            button.className = 'half-btn';
+            if (optionObj.text === '关于') button.onclick = showAbout;
+            else if (optionObj.text === '退出') button.onclick = () => makeChoiceHandler(optionObj.key);
+            else if (optionObj.text === '查看成就') button.onclick = showAchievements;
+            else if (optionObj.text === '清除数据') button.onclick = confirmClearData;
+            bottomOptionsDiv.appendChild(button);
+        });
+    }
     if (data.game_over) {
-        const btn = document.createElement('button');
-        btn.textContent = '重新开始';
-        btn.onclick = () => window.location.reload();
-        optionsDiv.appendChild(btn);
+        const button = document.createElement('button');
+        button.textContent = '重新开始';
+        button.onclick = () => window.location.reload();
+        optionsDiv.appendChild(button);
     }
-};
-
-const createButton = (option, start_event) => {
-    const btn = document.createElement('button');
-    btn.textContent = option.text;
-    switch(option.text) {
-        case '关于': 
-            btn.onclick = showAbout; 
-            break;
-        case '查看成就': 
-            btn.onclick = showAchievements; 
-            break;
-        case '清除数据': 
-            btn.onclick = confirmClearData; 
-            break;
-        default: 
-            btn.onclick = () => makeChoiceHandler(option.key, start_event);
+    if (data.achievements) {
+        const achievementsDiv = document.getElementById('achievements');
+        const listDiv = document.getElementById('achievements-list');
+        data.achievements.forEach(achievement => gameState.allAchievements.add(achievement));
+        if (gameState.allAchievements.size > 0) {
+            listDiv.innerHTML = '';
+            Array.from(gameState.allAchievements).reverse().forEach(achievement => {
+                const p = document.createElement('p');
+                p.textContent = achievement;
+                listDiv.appendChild(p);
+            });
+            achievementsDiv.style.display = 'block';
+        }
     }
-    return btn;
-};
+    const coverImg = document.getElementById('cover-img');
+    coverImg.style.display = gameState.currentApi === 'choose_start' ? 'block' : 'none';
+}
 
-const makeChoiceHandler = (choice, start_event = null) => {
+function makeChoiceHandler(choice) {
     let data;
-    switch(gameState.currentApi) {
+    switch (gameState.currentApi) {
         case 'choose_start': data = chooseStart(choice); break;
         case 'fixed_event': data = fixedEvent(choice); break;
         case 'random_event': data = randomEvent(choice); break;
@@ -281,87 +255,83 @@ const makeChoiceHandler = (choice, start_event = null) => {
     } else if (data.next_event) {
         gameState.currentApi = data.next_event;
     }
-};
+}
 
-const updateAchievements = data => {
-    if (!data.achievements?.length) {
-        achievementsDiv.style.display = gameState.allAchievements.size > 0 ? 'block' : 'none';
-        return;
+function showAchievements() {
+    const data = getAchievements();
+    let msg = "当前得分：" + data.score + "\n";
+    if (data.achievements.length > 0) {
+        msg += "已获得成就：\n" + data.achievements.join("\n");
+    } else {
+        msg += "还没有获得任何成就。";
     }
-    data.achievements.forEach(ach => gameState.allAchievements.add(ach));
-    if (gameState.allAchievements.size) {
-        achievementsListDiv.innerHTML = '';
-        Array.from(gameState.allAchievements).reverse().forEach(ach => {
-            const p = document.createElement('p');
-            p.textContent = ach;
-            achievementsListDiv.appendChild(p);
-        });
-        achievementsDiv.style.display = 'block';
-    }
-};
-
-const toggleCoverImage = () => {
-    coverImg.style.display = gameState.currentApi === 'choose_start' ? 'block' : 'none';
-};
-
-const showAchievements = () => {
-    const { score, achievements } = getAchievements();
-    const msg = achievements.length > 0 
-        ? `当前得分：${score}\n已获得成就：\n${achievements.join("\n")}`
-        : `当前得分：${score}\n还没有获得任何成就。`;
     alert(msg);
-};
+}
 
-const confirmClearData = () => {
+function confirmClearData() {
     if (confirm("确定要清除所有成就和分数吗？")) {
         alert(clearData().message);
     }
-};
+}
 
-const showAbout = () => {
+function showAbout() {
     const aboutDiv = document.getElementById('about');
-    aboutDiv.innerHTML = `
-        <pre style="white-space:pre-line;">
-About OK School Life
+    aboutDiv.innerHTML = `<pre style="white-space:pre-line;">About OK School Life
 Version ${gameState.version}
 At home, May 30, 2025
 
-Hi, I'm Still Alive (还活着), the developer of this game.
-[保持原有关于文本内容...]
-        </pre>
-        <button onclick="hideAbout()">返回</button>`;
-    document.querySelectorAll('#result, #message, #options, #achievements, #bottom-options')
-        .forEach(el => el.style.display = 'none');
+Hi, I'm Still Alive, in Chinese “还活着”, the developer of this game.
+
+First of all, thank you for playing this game.
+This is a simple text-based game where you can choose your school life path.
+You can make choices, earn achievements, and see how your decisions affect your story.
+The game includes some lighthearted elements, as well as black humor elements.
+Most of the content is based on my own school life experiences, so it may not be suitable for everyone.
+And I'm trying to make it funnier, so there are some jokes in it.
+
+I'm a newbie developer, and this is my first game.
+To be honest, I don't know how to make a game. I just wanted to create a game that I would enjoy playing.
+I must say that so many people have helped me a lot, including my friends and classmates.
+They're WaiJade, lagency, 智心逍遥, sky, YaXuan, Tomato, GuoHao, and many others.
+Especially, WaiJade, the co-developer of this game, wants to say something:
+
+"I am WaiJade. 
+Thanks for developing this game, which has reignited my passion for programming. 
+I was primarily responsible for the script that automates the packaging of the game's executable file,
+and contributed a little to the event library. 
+Thank you for playing!"
+
+I also want to thank the Modern AI Technology, especially OpenAI, 
+for providing the tools and resources that made this game possible.
+I'd like to thank Github for hosting the source code and allowing me to share it with everyone.
+
+This game is open source, and you can find the source code on GitHub:
+https://github.com/still-alive-hhz/OK-School-Life
+The game is still in development, so there may be bugs or incomplete features.
+If you have any questions or suggestions, please feel free to contact me.
+
+Enjoy the game!</pre>
+<button onclick="hideAbout()">返回</button>`;
     aboutDiv.style.display = 'block';
-};
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('message').style.display = 'none';
+    document.getElementById('options').style.display = 'none';
+    document.getElementById('achievements').style.display = 'none';
+    document.getElementById('bottom-options').style.display = 'none';
+}
 
-const hideAbout = () => {
+function hideAbout() {
     document.getElementById('about').style.display = 'none';
-    document.querySelectorAll('#result, #message, #options, #achievements, #bottom-options')
-        .forEach(el => el.style.display = '');
-};
+    document.getElementById('result').style.display = '';
+    document.getElementById('message').style.display = '';
+    document.getElementById('options').style.display = '';
+    document.getElementById('achievements').style.display = '';
+    document.getElementById('bottom-options').style.display = '';
+}
 
-const hideLoadingScreen = () => {
-    const loading = document.getElementById('loading-screen');
-    if (loading) {
-        loading.style.opacity = '0';
-        setTimeout(() => loading.style.display = 'none', 400);
-    }
-    document.querySelector('.game-container').style.display = '';
-};
-
-// 资源加载函数
-const preloadImage = src => new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = resolve;
-    img.onerror = reject;
-    img.src = src;
-});
-
-// 加载游戏数据（使用本地 data/events.json）
 async function loadGameData() {
     try {
-        const res = await fetch(GAME_DATA_URL);
+        const res = await fetch(GAME_DATA_URL + '?t=' + Date.now());
         if (!res.ok) throw new Error('Network response was not ok');
         gameState.eventData = await res.json();
         gameState.version = gameState.eventData.metadata?.version || gameState.version;
@@ -372,20 +342,7 @@ async function loadGameData() {
     return gameState.eventData;
 }
 
-// 初始化游戏：加载资源后启动
-async function initGame() {
-    try {
-        await Promise.all([
-            preloadImage('images/icons/icon-v4.png'),
-            preloadImage('https://cdn.jsdelivr.net/gh/CheongSzesuen/OK-School-Life-Web/images/welcome/mini/welcome-v4.png'),
-            loadGameData()
-        ]);
-    } catch (err) {
-        console.error('Error loading resources:', err);
-    } finally {
-        updateUI(startGame());
-        hideLoadingScreen();
-    }
-}
-
-window.onload = initGame;
+window.onload = async function() {
+    await loadGameData();
+    updateUI(startGame());
+};
