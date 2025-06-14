@@ -1,4 +1,4 @@
-const GAME_DATA_URL = 'data/events.json';
+const GAME_DATA_URL = 'https://cdn.jsdelivr.net/gh/still-alive-hhz/OK-School-Life@refs/heads/main/assets/data/events.json';
 
 const gameState = {
     currentApi: 'choose_start',
