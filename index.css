@@ -35,26 +35,29 @@ button,
 .half-btn,
 .start-btn {
     padding: 10px 24px;
-    background: #1976d2;
+    background: #76c99b; /* 改为 #76c99b */
     color: #fff;
     border: none;
     border-radius: 8px;
     font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     cursor: pointer;
     transition: background 0.2s, box-shadow 0.2s;
     box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
     outline: none;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-all;
 }
 button:hover,
 .half-btn:hover,
 .start-btn:hover {
-    background: #1565c0;
+    background: #43b981; /* 悬停状态颜色 */
 }
 button:active,
 .half-btn:active,
 .start-btn:active {
-    background: #0d47a1;
+    background: #43b981; /* 按下状态颜色 */
 }
 .achievements {
     margin-top: 20px;
@@ -74,10 +77,10 @@ button:active,
     color: #333;
 }
 .main-btns {
-    width: fit-content;
+    width: 100%;
     margin: 0 auto;
-    min-width: 320px;
-    max-width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
 #options {
     width: 100%;
@@ -91,16 +94,18 @@ button:active,
     box-sizing: border-box;
     font-size: 15px;
     padding: 10px 20px;
-    white-space: nowrap;
+    white-space: normal; /* 允许换行 */
 }
 .half-btn {
-    flex: 1 1 0;
-    min-width: 100px;
-    max-width: 220px;
+    flex: 1 1 auto; /* 自适应宽度 */
+    min-width: 0; /* 允许收缩 */
+    max-width: 100%; /* 不超过容器宽度 */
     padding: 10px 20px;
     font-size: 15px;
     box-sizing: border-box;
-    white-space: nowrap;
+    white-space: normal; /* 允许换行 */
+    overflow-wrap: break-word;
+    word-break: break-all;
 }
 .main-title {
     display: flex;
@@ -117,6 +122,13 @@ button:active,
     font-size: 13px;
     color: #888;
     text-align: center;
+}
+.credit-link {
+    color: #1976d2;
+    text-decoration: none;
+}
+.credit-link:hover {
+    text-decoration: underline;
 }
 
 /* 响应式优化：针对屏幕宽度小于600px的手机设备 */
@@ -140,15 +152,42 @@ button:active,
   }
 
   /* 调整按钮样式，适应小屏幕 */
-  .start-btn, .half-btn {
+  .start-btn,
+  .half-btn {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     font-size: 14px;
     padding: 8px 16px;
-    white-space: normal;  /* 允许换行 */
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-all;
   }
 
   /* 底部按钮调整为垂直方向排列 */
   .options-row {
     flex-direction: column;
     gap: 8px;
+  }
+}
+
+/* 针对宽屏 (min-width: 601px) 优化按钮布局 */
+@media (min-width: 601px) {
+  .options-row {
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  /* 保持 .half-btn 宽度不变 */
+  .half-btn {
+    flex: 1 1 auto;
+    max-width: 220px;
+  }
+  /* 修改开始按钮，让宽度和容器左右对齐 */
+  .start-btn {
+    width: 100%;       /* 使用 100% 宽度，和容器一样宽 */
+    min-width: 0;
+    max-width: none;   /* 取消固定最大宽度 */
+    margin: 20px 0 0 0;
   }
 }
