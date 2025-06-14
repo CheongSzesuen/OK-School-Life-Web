@@ -163,6 +163,8 @@ const getAchievements = () => ({ score: gameState.score, achievements: gameState
 const clearData = () => {
     gameState.achievements = [];
     gameState.score = 0;
+    gameState.allAchievements.clear();
+    localStorage.removeItem('achievements');
     return { message: '数据已清除！' };
 };
 
@@ -239,6 +241,11 @@ function updateUI(data) {
     }
     const coverImg = document.getElementById('cover-img');
     coverImg.style.display = gameState.currentApi === 'choose_start' ? 'block' : 'none';
+
+    // 在 updateUI 中保存最新的成就数据
+    if (data.achievements) {
+        localStorage.setItem('achievements', JSON.stringify(Array.from(gameState.allAchievements)));
+    }
 }
 
 function makeChoiceHandler(choice) {
@@ -342,7 +349,14 @@ async function loadGameData() {
     return gameState.eventData;
 }
 
+// 恢复已存储的成就（页面加载时执行）
 window.onload = async function() {
+    const savedAchievements = localStorage.getItem('achievements');
+    if (savedAchievements) {
+       const arr = JSON.parse(savedAchievements);
+       arr.forEach(ach => gameState.allAchievements.add(ach));
+       gameState.achievements = arr;
+    }
     await loadGameData();
     updateUI(startGame());
 };
