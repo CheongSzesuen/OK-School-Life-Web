@@ -61,57 +61,108 @@ function chooseStart(choice) {
     if (choice === '5') {
         return { message: '感谢游玩，期待下次再见！', game_over: true };
     }
+    // 从事件库中获取所有家庭情况选项，并随机抽取一个
+    const familyOptions = getEventList();
+    if (!familyOptions.length) {
+        return { message: "未加载家庭选项", game_over: true };
+    }
+    const randomIndex = Math.floor(Math.random() * familyOptions.length);
+    const selectedFamily = familyOptions[randomIndex];
+    
+    // 更新用户状态，并切换到学校选择阶段
     gameState.userState = {
-        familyIndex: choice,
+        familyIndex: (randomIndex + 1).toString(),  // 对应 "group_1", "group_2", "group_3"
         school: null,
         eventIdx: 0,
-        stage: "fixed",
+        stage: "choose_school",  // 切换到学校选择阶段
         randomUsed: new Set(),
         lastRandomIdx: null
     };
-    const familyOption = getEventList()[parseInt(choice) - 1];
+
+    return {
+        message: `${selectedFamily}。\n你中考考得很好，现在可以选择学校。`,
+        options: [
+            { key: '1', text: '羊县中学' },
+            { key: '2', text: '闪西省汗忠中学' },
+            { key: '3', text: '汗忠市龙港高级中学' }
+        ],
+        next_event: 'choose_school'
+    };
+}
+
+// 处理学校选择：直接以学校选项构造事件组 key，对应 JSON 中 "group_1", "group_2", "group_3"
+function chooseSchool(choice) {
+    // 保存学校选择，直接记录所选学校
+    gameState.userState.school = choice;
+    // 构造事件组 key
     const groupKey = `group_${choice}`;
     const events = getGroupEvents(groupKey);
-    if (!events.length) return { message: '未知事件', game_over: true };
-    const firstEvent = events[0];
+    if (!events.length) return { message: "未知事件", game_over: true };
+    // 重置固定事件使用记录，并返回一条随机固定事件
+    gameState.userState.fixedUsed = new Set();
+    const rndIndex = Math.floor(Math.random() * events.length);
+    gameState.userState.fixedUsed.add(rndIndex);
+    const event = events[rndIndex];
     return {
-        message: `${familyOption}。\n${firstEvent.question}${getContributorStr(firstEvent)}`,
-        options: Object.entries(firstEvent.choices).map(([key, text]) => ({ key, text })),
+        message: `${event.question}${getContributorStr(event)}`,
+        options: Object.entries(event.choices).map(([key, text]) => ({ key, text })),
         next_event: 'fixed_event'
     };
 }
 
+// 处理固定事件：使用选择学校对应的事件组，并在其中随机选择一个未使用的事件
 function fixedEvent(choice) {
-    const groupKey = `group_${gameState.userState.familyIndex}`;
+    const groupKey = `group_${gameState.userState.school}`;
     const events = getGroupEvents(groupKey);
     if (!events.length) return { message: '未知事件', game_over: true };
 
-    const currentEvent = events[gameState.userState.eventIdx];
+    // 如果尚未建立使用记录，则初始化
+    if (!gameState.userState.fixedUsed) {
+        gameState.userState.fixedUsed = new Set();
+    }
+    // 取出当前固定事件：本次处理的事件根据上一次已返回的结果已处理完毕，此时直接根据用户输入处理当前事件
+    // 此处当前事件已在之前返回，则这里直接处理结果
+    // 获取结果，注意当前事件中 results 对应选项的值
+    const currentEvent = events[Array.from(gameState.userState.fixedUsed).slice(-1)[0]];
     const res = pickResult(currentEvent.results[choice]);
+
+    // 处理成就
     const triggeredAchievements = [];
-    if (currentEvent.achievements?.[choice]) {
+    if (currentEvent.achievements && currentEvent.achievements[choice]) {
         const ach = currentEvent.achievements[choice];
-        triggeredAchievements.push(ach);
         if (!gameState.achievements.includes(ach)) {
             gameState.achievements.push(ach);
         }
+        triggeredAchievements.push(ach);
     }
+
+    // 如果结果要求结束游戏或当前选项在 end_game_choices 中，则结束游戏
     if (res.endGame || (currentEvent.end_game_choices && currentEvent.end_game_choices.includes(choice))) {
         return { message: `${res.text}\n你失败了，游戏结束！`, game_over: true, achievements: triggeredAchievements };
     }
-    gameState.userState.eventIdx += 1;
-    gameState.score += 1;
-    if (gameState.userState.eventIdx < events.length) {
-        const nextEvent = events[gameState.userState.eventIdx];
-        return {
-            message: `${res.text}\n${nextEvent.question}${getContributorStr(nextEvent)}`,
-            options: Object.entries(nextEvent.choices).map(([key, text]) => ({ key, text })),
-            next_event: 'fixed_event',
-            achievements: triggeredAchievements
-        };
+
+    // 选择下一条固定事件：从未使用的索引中随机选取
+    const total = events.length;
+    const unused = [];
+    for (let i = 0; i < total; i++) {
+        if (!gameState.userState.fixedUsed.has(i)) {
+            unused.push(i);
+        }
     }
-    gameState.userState.stage = "random";
-    return newRandomEvent(res.text, triggeredAchievements);
+    if (unused.length === 0) {
+        // 固定事件已全部使用，切换到随机事件阶段
+        gameState.userState.stage = "random";
+        return newRandomEvent(res.text, triggeredAchievements);
+    }
+    const nextIndex = unused[Math.floor(Math.random() * unused.length)];
+    gameState.userState.fixedUsed.add(nextIndex);
+    const nextEvent = events[nextIndex];
+    return {
+        message: `${res.text}\n${nextEvent.question}${getContributorStr(nextEvent)}`,
+        options: Object.entries(nextEvent.choices).map(([key, text]) => ({ key, text })),
+        next_event: 'fixed_event',
+        achievements: triggeredAchievements
+    };
 }
 
 function randomEvent(choice) {
@@ -240,7 +291,12 @@ function updateUI(data) {
         }
     }
     const coverImg = document.getElementById('cover-img');
-    coverImg.style.display = gameState.currentApi === 'choose_start' ? 'block' : 'none';
+    // 如果选项中包含 '开始游戏' 就是首页（显示图片），否则隐藏
+    if (data.options && data.options.some(option => option.text === '开始游戏')) {
+        coverImg.style.display = 'block';
+    } else {
+        coverImg.style.display = 'none';
+    }
 
     // 在 updateUI 中保存最新的成就数据
     if (data.achievements) {
@@ -251,10 +307,20 @@ function updateUI(data) {
 function makeChoiceHandler(choice) {
     let data;
     switch (gameState.currentApi) {
-        case 'choose_start': data = chooseStart(choice); break;
-        case 'fixed_event': data = fixedEvent(choice); break;
-        case 'random_event': data = randomEvent(choice); break;
-        default: data = startGame();
+        case 'choose_start': 
+            data = chooseStart(choice); 
+            break;
+        case 'choose_school': 
+            data = chooseSchool(choice); 
+            break;
+        case 'fixed_event': 
+            data = fixedEvent(choice); 
+            break;
+        case 'random_event': 
+            data = randomEvent(choice); 
+            break;
+        default: 
+            data = startGame();
     }
     updateUI(data);
     if (data.game_over) {
