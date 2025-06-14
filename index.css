@@ -131,6 +131,81 @@ button:active,
     text-decoration: underline;
 }
 
+/* 新增：关键帧动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}
+
+/* 应用动画效果 */
+/* 页面容器淡入 */
+.game-container {
+  animation: fadeIn 0.7s ease-out;
+}
+
+/* 消息和选项淡入 */
+.message,
+.options,
+.options-row {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* 主页图片滑入 */
+#cover-img {
+  animation: slideIn 1s ease-out;
+}
+
+/* 按钮初始淡入效果 */
+button,
+.half-btn,
+.start-btn {
+  animation: fadeIn 0.5s ease-out;
+  transform: scale(1);
+  transition: transform 0.2s ease-out, background 0.2s;
+}
+
+/* 按钮悬停时放大 */
+button:hover,
+.half-btn:hover,
+.start-btn:hover {
+  background: #43b981; /* 悬停状态颜色 */
+  transform: scale(1.05);
+}
+
+/* 按钮按下状态 */
+button:active,
+.half-btn:active,
+.start-btn:active {
+  background: #43b981; /* 按下状态颜色 */
+  transform: scale(0.98);
+}
+
 /* 响应式优化：针对屏幕宽度小于600px的手机设备 */
 @media (max-width: 600px) {
   /* 调整整体边距、内边距 */
