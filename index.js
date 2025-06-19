@@ -1,4 +1,4 @@
-const GAME_DATA_URL = 'https://cdn.jsdelivr.net/gh/still-alive-hhz/OK-School-Life@refs/heads/main/assets/data/events.json';
+const GAME_DATA_URL = 'data/events.json';
 
 const gameState = {
     currentApi: 'choose_start',
@@ -52,7 +52,8 @@ function startGame() {
             { key: '2', text: '查看成就' },
             { key: '3', text: '清除数据' },
             { key: '4', text: '关于' },
-            { key: '5', text: '退出' }
+            { key: '5', text: '退出' },
+            { key: '6', text: '贡献事件' }
         ]
     };
 }
@@ -94,8 +95,8 @@ function chooseStart(choice) {
 function chooseSchool(choice) {
     // 保存学校选择，直接记录所选学校
     gameState.userState.school = choice;
-    // 构造事件组 key
-    const groupKey = `group_${choice}`;
+    // 使用之前设置的 familyIndex 来构造固定事件组 key
+    const groupKey = `group_${gameState.userState.familyIndex}`;
     const events = getGroupEvents(groupKey);
     if (!events.length) return { message: "未知事件", game_over: true };
     // 重置固定事件使用记录，并返回一条随机固定事件
@@ -248,7 +249,8 @@ function updateUI(data) {
                 optionObj.text === '关于' ||
                 optionObj.text === '退出' ||
                 optionObj.text === '查看成就' ||
-                optionObj.text === '清除数据'
+                optionObj.text === '清除数据' ||
+                optionObj.text === '贡献事件'
             ) {
                 bottomBtns.push(optionObj);
             } else {
@@ -259,14 +261,32 @@ function updateUI(data) {
                 optionsDiv.appendChild(button);
             }
         });
+        
+        // 调整底部按钮排序：确保 “贡献事件” 显示在 “关于” 的左侧
+        const orderMapping = {
+            '查看成就': 1,
+            '清除数据': 2,
+            '贡献事件': 3,
+            '关于': 4,
+            '退出': 5
+        };
+        bottomBtns.sort((a, b) => orderMapping[a.text] - orderMapping[b.text]);
+        
         bottomBtns.forEach(optionObj => {
             const button = document.createElement('button');
             button.textContent = optionObj.text;
             button.className = 'half-btn';
-            if (optionObj.text === '关于') button.onclick = showAbout;
-            else if (optionObj.text === '退出') button.onclick = () => makeChoiceHandler(optionObj.key);
-            else if (optionObj.text === '查看成就') button.onclick = showAchievements;
-            else if (optionObj.text === '清除数据') button.onclick = confirmClearData;
+            if (optionObj.text === '关于') {
+                button.onclick = showAbout;
+            } else if (optionObj.text === '退出') {
+                button.onclick = () => makeChoiceHandler(optionObj.key);
+            } else if (optionObj.text === '查看成就') {
+                button.onclick = showAchievements;
+            } else if (optionObj.text === '清除数据') {
+                button.onclick = confirmClearData;
+            } else if (optionObj.text === '贡献事件') {
+                button.onclick = () => location.href = '/ctb.html';
+            }
             bottomOptionsDiv.appendChild(button);
         });
     }
