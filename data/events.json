@@ -68,19 +68,6 @@
         "contributors": [
           "Still Alive"
         ]
-      },
-      {
-        "id": "event_1_4",
-        "question": "校园生活才刚刚开始",
-        "choices": {
-          "1": "继续"
-        },
-        "results": {
-          "1": "你选择了继续。"
-        },
-        "end_game_choices": [],
-        "achievements": {},
-        "contributors": []
       }
     ],
     "group_2": [
@@ -144,19 +131,6 @@
         "contributors": [
           "Still Alive"
         ]
-      },
-      {
-        "id": "event_2_4",
-        "question": "校园生活才刚刚开始",
-        "choices": {
-          "1": "继续"
-        },
-        "results": {
-          "1": "你选择了继续。"
-        },
-        "end_game_choices": [],
-        "achievements": {},
-        "contributors": []
       }
     ],
     "group_3": [
@@ -220,19 +194,6 @@
         "contributors": [
           "Still Alive"
         ]
-      },
-      {
-        "id": "event_3_4",
-        "question": "校园生活才刚刚开始",
-        "choices": {
-          "1": "继续"
-        },
-        "results": {
-          "1": "你选择了继续。"
-        },
-        "end_game_choices": [],
-        "achievements": {},
-        "contributors": []
       }
     ]
   },
@@ -1488,7 +1449,8 @@
         "2": [
           {
             "text": "两个月后某天晚上，你拔插头的时候突然炸出了电火花，你被电进医院了。",
-            "prob": 0.4
+            "prob": 0.4,
+            "end_game": true
           },
           {
             "text": "两个月后某天晚上，你拔插头的时候突然炸出了电火花，感谢发达的电学知识，你安然无恙。",
@@ -1498,7 +1460,8 @@
         "3": [
           {
             "text": "电工师傅随便用绝缘胶带缠了一下，两个月后某天晚上，你拔插头的时候突然炸出了电火花，你被电进医院了。",
-            "prob": 0.6
+            "prob": 0.6,
+            "end_game": true
           },
           {
             "text": "电工师傅仔细给你用绝缘胶带缠了一下，并告知了你注意事项，之后用了几个月，你换了新线，什么都没发生。",

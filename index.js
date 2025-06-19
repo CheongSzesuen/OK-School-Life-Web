@@ -41,8 +41,8 @@ function weightedRandom(items, weights) {
 }
 
 const getEventList = () => gameState.eventData?.metadata?.start_options || [];
-const getGroupEvents = groupKey => gameState.eventData?.events?.fixed_events?.[groupKey] || [];
-const getRandomEvents = () => gameState.eventData?.events?.random_events || [];
+const getGroupEvents = groupKey => gameState.eventData?.events?.[groupKey] || [];
+const getRandomEvents = () => gameState.eventData?.random_events || [];
 
 function startGame() {
     return {
@@ -91,24 +91,52 @@ function chooseStart(choice) {
     };
 }
 
-// 处理学校选择：直接以学校选项构造事件组 key，对应 JSON 中 "group_1", "group_2", "group_3"
+// 处理学校选择：直接以学校选项构造事件组，对应 JSON 中 "group_1", "group_2", "group_3"
 function chooseSchool(choice) {
-    // 保存学校选择，直接记录所选学校
-    gameState.userState.school = choice;
-    // 使用之前设置的 familyIndex 来构造固定事件组 key
-    const groupKey = `group_${gameState.userState.familyIndex}`;
-    const events = getGroupEvents(groupKey);
-    if (!events.length) return { message: "未知事件", game_over: true };
-    // 重置固定事件使用记录，并返回一条随机固定事件
-    gameState.userState.fixedUsed = new Set();
-    const rndIndex = Math.floor(Math.random() * events.length);
-    gameState.userState.fixedUsed.add(rndIndex);
-    const event = events[rndIndex];
-    return {
-        message: `${event.question}${getContributorStr(event)}`,
-        options: Object.entries(event.choices).map(([key, text]) => ({ key, text })),
-        next_event: 'fixed_event'
-    };
+  // 保存学校选择
+  gameState.userState.school = choice;
+  
+  // 重置状态：固定/随机事件使用记录，并切换阶段为固定事件
+  gameState.userState.fixedUsed = new Set();
+  gameState.userState.randomUsed = new Set();
+  gameState.userState.stage = "fixed";
+  
+  // 返回第一个固定事件
+  return newFixedEvent("", []);
+}
+
+function newFixedEvent(prevResult = "", triggeredAchievements = []) {
+  const groupKey = `group_${gameState.userState.school}`;
+  const events = getGroupEvents(groupKey);
+  
+  // 去除所有空白字符后进行比较
+  const unused = [];
+  for (let i = 0; i < events.length; i++) {
+      const q = (events[i].question || "").replace(/\s/g, "");
+      if (!gameState.userState.fixedUsed.has(i) && q !== "校园生活才刚刚开始") {
+          unused.push(i);
+      }
+  }
+  
+  // 如果固定事件全部使用（或只剩下"校园生活才刚刚开始"），则切换到随机事件阶段
+  if (unused.length === 0) {
+      gameState.userState.stage = "random";
+      return newRandomEvent(prevResult, triggeredAchievements);
+  }
+  
+  const idx = unused[Math.floor(Math.random() * unused.length)];
+  gameState.userState.fixedUsed.add(idx);
+  const event = events[idx];
+  const msg = prevResult
+      ? `${prevResult}\n${event.question}${getContributorStr(event)}`
+      : `${event.question}${getContributorStr(event)}`;
+  
+  return {
+      message: msg,
+      options: Object.entries(event.choices).map(([key, text]) => ({ key, text })),
+      next_event: 'fixed_event',
+      achievements: triggeredAchievements
+  };
 }
 
 // 处理固定事件：使用选择学校对应的事件组，并在其中随机选择一个未使用的事件
