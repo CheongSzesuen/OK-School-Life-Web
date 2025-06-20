@@ -1337,6 +1337,9 @@
         "4": "这个选项纯粹是二进制随机排列，和开发者无关。"
       },
       "end_game_choices": [],
+      "achievements": {
+        "4": "Big胆！"
+      },
       "contributors": [
         "YaXuan"
       ]
