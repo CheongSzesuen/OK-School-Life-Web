@@ -53,7 +53,7 @@ function startGame() {
             { key: '3', text: '清除数据' },
             { key: '4', text: '关于' },
             { key: '5', text: '退出' },
-            { key: '6', text: '贡献事件（待完成）' }
+            { key: '6', text: '贡献事件' }
         ]
     };
 }
@@ -278,7 +278,7 @@ function updateUI(data) {
                 optionObj.text === '退出' ||
                 optionObj.text === '查看成就' ||
                 optionObj.text === '清除数据' ||
-                optionObj.text === '贡献事件（待完成）'
+                optionObj.text === '贡献事件'
             ) {
                 bottomBtns.push(optionObj);
             } else {
@@ -294,7 +294,7 @@ function updateUI(data) {
         const orderMapping = {
             '查看成就': 1,
             '清除数据': 2,
-            '贡献事件（待完成）': 3,
+            '贡献事件': 3,
             '关于': 4,
             '退出': 5
         };
@@ -312,8 +312,8 @@ function updateUI(data) {
                 button.onclick = showAchievements;
             } else if (optionObj.text === '清除数据') {
                 button.onclick = confirmClearData;
-            } else if (optionObj.text === '贡献事件（待完成）') {
-                button.onclick = () => location.href = '/ctb.html';
+            } else if (optionObj.text === '贡献事件') {
+                button.onclick = () => window.open('https://ctb.okschoollife.fun', '_blank');
             }
             bottomOptionsDiv.appendChild(button);
         });
