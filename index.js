@@ -313,7 +313,7 @@ function updateUI(data) {
             } else if (optionObj.text === '清除数据') {
                 button.onclick = confirmClearData;
             } else if (optionObj.text === '贡献事件') {
-                button.onclick = () => window.open('https://ctb.okschoollife.fun', '_blank');
+                button.onclick = () => window.open('https://events.okschoollife.fun', '_blank');
             }
             bottomOptionsDiv.appendChild(button);
         });
